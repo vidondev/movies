@@ -58,7 +58,7 @@ const url = (path: string, type: ImageSize = "original") => {
     console.error("Invalid image path provided.");
     return "/placeholder.png";
   }
-  return `${process.env.API_IMAGE_URL}/${type}/${path}`;
+  return `https://image.tmdb.org/t/p/${type}/${path}`;
 };
 
 /**

@@ -1,3 +1,9 @@
+import SiteNav from "@/components/site-nav";
+
 export default function Header() {
-  return <nav className="header">Header</nav>;
+  return (
+    <header className="header">
+      <SiteNav />
+    </header>
+  );
 }
