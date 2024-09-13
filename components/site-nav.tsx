@@ -133,18 +133,17 @@ const SiteNavItem: React.FC<NavItem> = ({ title, href, Icon, items }) => {
       </NavigationMenuTrigger>
       <NavigationMenuContent className="flex">
         <ul className="lg:w-[500px] p-6 grid lg:grid-cols-[.75fr_1fr] gap-2">
-          <li className={cn(`row-span-4`, "bg-slate-600")}>
-            <div className="relative aspect-poster">
+          <li className={cn(`row-span-4`, "")}>
+            <div className="relative aspect-poster ">
               <Image
                 src={tmdbImage.backdrop(
                   "4TzwDWpLmb9bWJjlN3iBUdvgarw.jpg",
                   "w300"
                 )}
                 fill
-                className="size-full z-0"
+                className="size-full rounded-md border"
                 alt=""
               />
-              <h3 className="text-white relative">title</h3>
             </div>
           </li>
           {items?.map((item, index) => (

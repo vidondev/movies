@@ -19,6 +19,9 @@ const config: Config = {
       aspectRatio: {
         poster: "2 / 3",
       },
+      gridTemplateColumns: {
+        layout: "260px minmax(0, 1fr)",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

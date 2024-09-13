@@ -71,7 +71,7 @@
 }
 
 .app-container {
-  @apply flex flex-col min-h-svh;
+  @apply grid lg:grid-cols-layout min-h-svh;
 }
 
 .header {
