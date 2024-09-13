@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./Header";
 import { Sidebar } from "@/components/sidebar";
+import { Button } from "@/components/ui/button";
+import { Search, Settings } from "lucide-react";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +24,24 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="app-container">
           <Sidebar />
-          <main className="container">{children}</main>
+          <main className="p-4 h-dvh overflow-hidden">
+            <div className="border rounded-lg flex flex-col h-full">
+              <div className="flex border-b p-4">
+                <div className="ml-auto flex space-x-2">
+                  <Button size="icon" variant={`outline`}>
+                    <Search size={16} />
+                  </Button>
+                  <Button size="icon" variant={`outline`}>
+                    <Settings size={16} />
+                  </Button>
+                </div>
+              </div>
+              <ScrollArea>
+            {children}
+            <ScrollBar  />
+            </ScrollArea>
+            </div>
+          </main>
         </div>
       </body>
     </html>

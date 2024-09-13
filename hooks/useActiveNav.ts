@@ -1,9 +1,19 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const useActiveNav = (href: string) => {
+  const [isActive, setIsActive] = useState(false)
   const pathname = usePathname();
-  if (href === "/") return pathname === href;
-  return pathname.startsWith(href);
+
+  useEffect(() => {
+    if (href === "/") {
+       setIsActive(pathname === href);
+    } else {
+      setIsActive(pathname.startsWith(href))
+    }
+  }, [pathname])
+  
+  return {isActive}
 };
