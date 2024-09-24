@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "./globals.scss";
 import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Menu, Search, Settings } from "lucide-react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const inter = Inter({ subsets: ["latin"] });
 
