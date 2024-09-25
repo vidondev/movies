@@ -159,7 +159,7 @@ const CarouselContent = React.forwardRef<
   return (
     <div
       ref={carouselRef}
-      className="px-[--slide-padding] lg:px-[--slide-padding-lg] -ml-[--slide-offset] overflow-hidden"
+      className="px-[--slide-padding] lg:px-[--slide-padding-lg] -mt-[10px] -ml-[--slide-offset] overflow-hidden"
     >
       <div
         ref={ref}
@@ -209,10 +209,8 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute  h-8 w-8 rounded-full",
-        orientation === "horizontal"
-          ? "-left-12 top-1/2 -translate-y-1/2"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+        "  h-8 w-8 rounded-full",
+      
         className
       )}
       disabled={!canScrollPrev}
