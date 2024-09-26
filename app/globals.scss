@@ -94,7 +94,7 @@
   }
 
   .h-hero {
-    @apply h-[20vh] min-h-[480px];
+    @apply h-[25vh] md:h-[60vh] min-h-[560px];
   }
 }
 

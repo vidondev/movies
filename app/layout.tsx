@@ -4,6 +4,7 @@ import "./globals.scss";
 import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Menu, Search, Settings } from "lucide-react";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,7 @@ export default function RootLayout({
         <div className="app-container">
           <Sidebar />
           <main className="lg:p-4 h-dvh overflow-hidden">
-            <div className="lg:border lg:rounded-lg flex flex-col h-full ">
+            <div className="lg:border lg:rounded-lg flex flex-col h-full">
               <div className="flex border-b p-4">
                 <div className="lg:hidden">
                 <Button size="icon" variant={`outline`}>
@@ -39,12 +40,11 @@ export default function RootLayout({
                   </Button>
                 </div>
               </div>
-              <div className="overflow-y-auto">
-            {children}
-            </div>
+              <div className="overflow-y-auto">{children}</div>
             </div>
           </main>
         </div>
+        <TailwindIndicator />
       </body>
     </html>
   );

@@ -10,3 +10,22 @@ export function getRandomItems<T>(array: T[], count: number = 1): T[] {
   const startIndex = Math.floor(Math.random() * (maxStartIndex + 1));
   return array.slice(startIndex, startIndex + count);
 }
+
+/**
+ * Format minutes into hours and mins
+ */
+export function formatTime(minutes: number) {
+  // seconds
+  const seconds = minutes * 60
+  let secondsLeft = seconds
+
+  // hours
+  const hours = Math.floor(secondsLeft / 3600)
+  secondsLeft = secondsLeft % 3600
+
+  // mins
+  const mins = Math.floor(secondsLeft / 60)
+  secondsLeft = secondsLeft % 60
+
+  return `${hours ? `${hours}h` : ''} ${mins}min`
+}

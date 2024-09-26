@@ -38,7 +38,6 @@ const Ratings = ({ ...props }: RatingsProps) => {
   } = props;
 
   const fullStars = Math.floor(rating);
-  console.log("🚀 ~ Ratings ~ fullStars:", fullStars);
   const partialStar =
     rating % 1 > 0 ? (
       <PartialStar

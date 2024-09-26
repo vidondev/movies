@@ -3,12 +3,10 @@ import Link from "next/link";
 import { Movie } from "@/services/models/movie";
 import { MediaCard } from "./media-card";
 import { MediaPoster } from "../images/poster";
-import { Star } from "lucide-react";
 import { Ratings } from "../ratings";
 
 export const MovieCard: React.FC<Movie> = (props) => {
   const { id, poster_path, title, vote_average, release_date } = props;
-  console.log("🚀 ~ vote_average:", vote_average);
   return (
     <>
       <MediaCard.Root className="poster">
