@@ -14,7 +14,6 @@ import {
   Clapperboard,
   Home,
   LucideIcon,
-  Origami,
   Search,
   Tv,
   UserRound,
@@ -26,6 +25,7 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 
 import { tmdbImage } from "@/config/image";
+import { Icons } from "./icons";
 
 export type NavItem = {
   title: string;
@@ -99,7 +99,7 @@ const SiteNav: React.FC = () => {
       <div className="flex items-center space-x-3">
         <div>
           <Link href={`/`}>
-            <Origami />
+            <Icons.Logo />
           </Link>
         </div>
         <NavigationMenu>

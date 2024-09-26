@@ -1,4 +1,6 @@
-export interface TV {
+import { WithMediaType } from "./common";
+
+export interface TvShow {
   backdrop_path: string;
   id: number;
   name: string;
@@ -15,3 +17,5 @@ export interface TV {
   vote_count: number;
   origin_country: string[];
 }
+
+export type TvShowWithMediaType = WithMediaType<TvShow, "tv">;

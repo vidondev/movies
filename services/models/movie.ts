@@ -1,3 +1,4 @@
+import { WithMediaType } from "./common";
 import { Language } from "./configuration";
 import { Genre } from "./genre";
 
@@ -64,3 +65,5 @@ export interface AlternativeTitle {
   title: string;
   type: string;
 }
+
+export type MovieWithMediaType = WithMediaType<Movie, "movie">;

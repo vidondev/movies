@@ -1,0 +1,33 @@
+import React from "react";
+import Link from "next/link";
+import { MediaCard } from "./media-card";
+import { MediaPoster } from "../images/poster";
+import { TvShow } from "@/services/models/tv";
+import { Star } from "lucide-react";
+import { Ratings } from "../ratings";
+
+export const TvCard: React.FC<TvShow> = ({
+  id,
+  poster_path,
+  name,
+  vote_average,
+  first_air_date,
+}) => {
+  return (
+    <MediaCard.Root className="poster">
+      <Link href={`/tv/${id}`} key={id} prefetch={false}>
+        <div className="aspect-poster relative">
+          <MediaPoster image={poster_path} alt={name} />
+        </div>
+      </Link>
+      <MediaCard.Content className="px-2 2xl:px-4;">
+        <MediaCard.Title>{name}</MediaCard.Title>
+        <div className="flex items-center text-muted-foreground space-x-1">
+          <Ratings rating={(vote_average / 10) * 5} variant="yellow" />
+          <span>{vote_average.toFixed(1)}</span>
+        </div>
+        <MediaCard.Excerpt>{first_air_date}</MediaCard.Excerpt>
+      </MediaCard.Content>
+    </MediaCard.Root>
+  );
+};

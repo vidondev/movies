@@ -2,10 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
 import {
@@ -14,12 +13,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { Movie } from "@/services/models/movie";
-import { tmdbImage } from "@/config/image";
+import { MovieWithMediaType } from "@/services/models/movie";
+import { TvShowWithMediaType } from "@/services/models/tv";
+import { MovieCard } from "./cards/movie-card";
+import { TvCard } from "./cards/tv-card";
 
 interface TrendCarouselProps {
   title?: string;
-  items: Movie[];
+  items: MovieWithMediaType[] | TvShowWithMediaType[];
 }
 
 export const TrendCarousel: React.FC<TrendCarouselProps> = ({
@@ -27,8 +28,8 @@ export const TrendCarousel: React.FC<TrendCarouselProps> = ({
   items,
 }) => {
   const [api, setApi] = useState<CarouselApi>();
-  const [canScrollPrev, setCanScrollPrev] = useState(false)
-  const [canScrollNext, setCanScrollNext] = useState(true)
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(true);
 
   function nextSlide() {
     api?.scrollNext();
@@ -39,30 +40,43 @@ export const TrendCarousel: React.FC<TrendCarouselProps> = ({
   }
 
   useEffect(() => {
-    if (!api) return
-
+    if (!api) return;
 
     api.on("select", () => {
-      setCanScrollNext(api?.canScrollNext())
-      setCanScrollPrev(api?.canScrollPrev())
-    })
+      setCanScrollNext(api?.canScrollNext());
+      setCanScrollPrev(api?.canScrollPrev());
+    });
 
     api.on("resize", () => {
-      setCanScrollNext(api?.canScrollNext())
-      setCanScrollPrev(api?.canScrollPrev())
-    })
-  }, [api])
+      setCanScrollNext(api?.canScrollNext());
+      setCanScrollPrev(api?.canScrollPrev());
+    });
+  }, [api]);
 
   return (
     <section className="space-y-2">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl tracking-tight">{title}</h2>
         <div className="flex space-x-2">
-          <Button size="icon" variant="outline" className="rounded-full" onClick={previousSlide} disabled={!canScrollPrev}>
+          <Button
+            size="icon"
+            variant="outline"
+            className="rounded-full"
+            onClick={previousSlide}
+            disabled={!canScrollPrev}
+          >
             <ChevronLeft />
+            <span className="sr-only">Previous</span>
           </Button>
-          <Button size="icon" variant="outline" className="rounded-full" onClick={nextSlide} disabled={!canScrollNext}>
+          <Button
+            size="icon"
+            variant="outline"
+            className="rounded-full"
+            onClick={nextSlide}
+            disabled={!canScrollNext}
+          >
             <ChevronRight />
+            <span className="sr-only">Next</span>
           </Button>
         </div>
       </div>
@@ -76,32 +90,10 @@ export const TrendCarousel: React.FC<TrendCarouselProps> = ({
         <CarouselContent>
           {items.map((item, index) => (
             <CarouselItem key={`item-${index}`} className="menu-item">
-              <Link href="/">
-                <div className="aspect-poster">
-                  <Image
-                    src={tmdbImage.poster(item.poster_path, "w342")}
-                    alt={item.original_title}
-                    width={0}
-                    height={0}
-                    unoptimized
-                    className="size-full rounded-md object-cover"
-                  />
-                </div>
-              </Link>
-              <div className="px-3 mt-1 space-y-1">
-                <h3 className="font-medium leading-none">
-                  <Link
-                    href="/"
-                    className="font-medium leading-none hover:text-primary transition-colors"
-                  >
-                    {item.title}
-                  </Link>
-                </h3>
-                <p className="flex items-center text-muted-foreground space-x-1">
-                  <Star size={18}/>
-                  <span className=" ">{item.vote_average.toFixed(1)}</span>
-                </p>
-              </div>
+              {item.media_type === "movie" && (
+                <MovieCard key={item.id} {...item} />
+              )}
+              {item.media_type === "tv" && <TvCard key={item.id} {...item} />}
             </CarouselItem>
           ))}
         </CarouselContent>

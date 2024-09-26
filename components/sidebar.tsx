@@ -15,6 +15,7 @@ import {
 import { NavItem } from "./site-nav";
 import Link from "next/link";
 import { useActiveNav } from "@/hooks/useActiveNav";
+import { Icons } from "./icons";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -92,7 +93,10 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="py-4 space-y-4">
         <div className="logo">
           <Link href="/">
-          <Box className="size-14 mx-auto  bg-gray-600 text-white rounded-full p-2" strokeWidth={1}/>
+            <Icons.Logo
+              className="size-14 mx-auto  bg-gray-600 text-white rounded-full p-2"
+              strokeWidth={1}
+            />
           </Link>
         </div>
         {navItems.map((navItem, index) => {
@@ -103,7 +107,7 @@ export function Sidebar({ className }: SidebarProps) {
               </h2>
               <div className="space-y-1">
                 {navItem.items?.map((item, index) => (
-                  <SiteNavItem {...item} key={`item-${index}`}/>
+                  <SiteNavItem {...item} key={`item-${index}`} />
                 ))}
               </div>
             </div>
@@ -115,11 +119,14 @@ export function Sidebar({ className }: SidebarProps) {
 }
 
 const SiteNavItem: React.FC<NavItem> = ({ href, title, Icon }) => {
-  const {isActive} = useActiveNav(href);
+  const { isActive } = useActiveNav(href);
   return (
     <Button
       variant={`ghost`}
-      className={cn("w-full justify-start hover:bg-gray-600 hover:text-white", isActive && "bg-gray-600 text-white")}
+      className={cn(
+        "w-full justify-start hover:bg-gray-600 hover:text-white",
+        isActive && "bg-gray-600 text-white"
+      )}
       asChild
     >
       <Link href={href} className="flex">
