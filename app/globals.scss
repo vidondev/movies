@@ -72,8 +72,12 @@
     --chart-5: 340 75% 55%;
   }
 
+  .h-hero {
+    @apply h-[25vh] min-h-[360px];
+  }
+
   .aspect-poster {
-    aspect-ratio: 3/4;
+    aspect-ratio: 4/3;
   }
 }
 
@@ -85,44 +89,25 @@
   @apply h-14 sticky top-0 z-40 w-full border-b bg-background;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground overflow-y-hidden;
-  }
-
-  .h-hero {
-    @apply h-[25vh] md:h-[60vh] min-h-[560px];
-  }
-}
-
 .menu-item {
   @apply lg:basis-1/4 md:basis-1/3 basis-1/2 xl:basis-1/5 2xl:basis-1/6;
 }
 
 .poster {
   & > a {
-    @apply py-4 px-2 block 2xl:py-6 2xl:px-4;
+   @apply block rounded-md transition duration-300 overflow-hidden z-10 ;
+   &:hover {
+    box-shadow: inset rgb(186 182 182) 0px 0px 0px 3px;
+   }
     & > .aspect-poster {
-      @apply relative transition  duration-300;
-      &::before {
-        content: "";
-        @apply transition duration-300 opacity-0 absolute inset-0 rounded-md border border-transparent outline outline-[3px] outline-offset-[2px] outline-border;
+      & img {
+        @apply relative transition  duration-300 ;
       }
     }
-    &:hover > .aspect-poster {
+    &:hover > .aspect-poster img {
       @apply scale-105;
-      &::before {
-        @apply opacity-100;
-      }
     }
   }
-}
-
-.section {
-  @apply w-[calc(100%_+_(2_*_var(--slide-padding))_+_var(--slide-offset))] lg:w-[calc(100%_+_(2_*_var(--slide-padding-lg))_+_var(--slide-offset))] ml-[calc(-1_*_(var(--slide-padding)))] lg:ml-[calc(-1_*_(var(--slide-padding-lg)))];
 }
 
 @layer components {

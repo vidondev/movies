@@ -11,24 +11,37 @@ import { Skeleton } from "./ui/skeleton";
 import { Ratings } from "./ratings";
 import { MediaTrailerDialog } from "./media-trailer-dialog";
 import { WithVideos } from "@/services/api/types";
+import { Service } from "@/services/api";
 
 interface MovieHeroProps {
-  movies:(MovieDetails & WithVideos)[];
+  movies: Movie[]
   count?: number;
 }
 
 export const MovieHero: React.FC<MovieHeroProps> = ({ movies, count = 1 }) => {
-  const [mounted, setMounted] = useState(false);
   const items = getRandomItems(movies, count);
+  const [data, setData] = useState<(MovieDetails & WithVideos)[]>([])
+
+  const fetchData = async () => {
+    
+  const item = items.pop();
+  let heroMovie = null
+  if(item) {
+    heroMovie = await Service.movie.detail<WithVideos>(item?.id, {
+      append_to_response: 'videos'
+    })
+    setData([heroMovie])
+  }
+  }
 
   useEffect(() => {
-    setMounted(true);
+    fetchData()
   }, []);
 
-  if (!mounted) return <Skeleton className="h-hero relative w-full" />;
+  if (data.length === 0) return <Skeleton className="h-hero relative w-full rounded-lg" />;
 
-  return items.map((item) => (
-    <div className="w-full  relative h-hero" key={item.id}>
+  return data.map((item) => (
+    <div className="w-full rounded-lg drop-shadow-lg overflow-hidden relative h-hero" key={item.id}>
       <div className="relative h-full flex flex-col justify-end z-10 p-5 space-y-4  md:px-10">
         <div className="flex flex-col justify-end">
           <h1 className="text-2xl font-medium leading-tight tracking-tighter md:text-4xl text-white">
@@ -77,7 +90,6 @@ export const MovieHero: React.FC<MovieHeroProps> = ({ movies, count = 1 }) => {
         priority
         image={item.backdrop_path}
         alt={item.title}
-        className="rounded-none"
       />
       <div className="overlay"></div>
     </div>

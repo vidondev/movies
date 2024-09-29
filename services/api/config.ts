@@ -9,7 +9,7 @@
  * The base URL for the TMDB API.
  * @type {string}
  */
-const baseUrl: string = `${process.env.API_BASEURL}`;
+const baseUrl: string = `https://api.themoviedb.org/3`;
 
 /**
  * Default headers for API requests.
@@ -18,7 +18,7 @@ const baseUrl: string = `${process.env.API_BASEURL}`;
  */
 const defaultHeaders: Record<string, string> = {
   "Content-Type": "application/json",
-  Authorization: `Bearer ${process.env.TMDB_KEY}`,
+  Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NTA5Yzk0ZTUxNWI0Yzg0YTdiY2ViNGI1NTIwMzBkOSIsIm5iZiI6MTcyNTUyMDc5My43NjIxMDksInN1YiI6IjY2ZDdjYzIyYzNiZWE2MzRjOTI5ZGZiZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MXJ16kSvhL6TRsUssDjR_vvql31Y4U7jQoG6VkAfm-s`,
 };
 
 /**

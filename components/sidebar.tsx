@@ -89,30 +89,29 @@ export function Sidebar({ className }: SidebarProps) {
   ];
 
   return (
-    <div className={cn(className, "hidden lg:block")}>
-      <div className="py-4 space-y-4">
-        <div className="logo">
-          <Link href="/">
-            <Icons.Logo
-              className="size-14 mx-auto  bg-gray-600 text-white rounded-full p-2"
-              strokeWidth={1}
-            />
-          </Link>
-        </div>
-        {navItems.map((navItem, index) => {
-          return (
-            <div className="px-3 py-2" key={`nav-item-${index}`}>
-              <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-                {navItem.title}
-              </h2>
-              <div className="space-y-1">
-                {navItem.items?.map((item, index) => (
-                  <SiteNavItem {...item} key={`item-${index}`} />
-                ))}
+    <div className="pl-4">
+      <div
+        className={cn(
+          className,
+          "hidden lg:block border rounded-md sticky top-[72px]"
+        )}
+      >
+        <div className="py-4 space-y-4">
+          {navItems.map((navItem, index) => {
+            return (
+              <div className="px-3 py-2" key={`nav-item-${index}`}>
+                <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+                  {navItem.title}
+                </h2>
+                <div className="space-y-1">
+                  {navItem.items?.map((item, index) => (
+                    <SiteNavItem {...item} key={`item-${index}`} />
+                  ))}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

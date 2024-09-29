@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.scss";
 import { Sidebar } from "@/components/sidebar";
-import { Button } from "@/components/ui/button";
-import { Menu, Search, Settings } from "lucide-react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
+import Header from "@/components/site-header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,26 +20,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="app-container">
+        <Header />
+        <div className="app-container relative">
           <Sidebar />
-          <main className="lg:p-4 h-dvh overflow-hidden">
-            <div className="lg:border lg:rounded-lg flex flex-col h-full">
-              <div className="flex border-b p-4">
-                <div className="lg:hidden">
-                <Button size="icon" variant={`outline`}>
-                    <Menu size={16} />
-                  </Button>
-                </div>
-                <div className="ml-auto flex space-x-2">
-                  <Button size="icon" variant={`outline`}>
-                    <Search size={16} />
-                  </Button>
-                  <Button size="icon" variant={`outline`}>
-                    <Settings size={16} />
-                  </Button>
-                </div>
-              </div>
-              <div className="overflow-y-auto">{children}</div>
+          <main className="lg:ml-10">
+            <div className="lg:rounded-tl-lg bg-accent fixed w-full h-full" />
+            <div className="lg:rounded-tl-lg bg-accent fixed w-full h-[var(--radius)] z-20" />
+            <div className="py-[var(--radius)] relative">
+              <div className="container">{children}</div>
             </div>
           </main>
         </div>

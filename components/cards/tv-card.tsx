@@ -17,10 +17,10 @@ export const TvCard: React.FC<TvShow> = ({
     <MediaCard.Root className="poster">
       <Link href={`/tv/${id}`} key={id} prefetch={false}>
         <div className="aspect-poster relative">
-          <MediaPoster image={poster_path} alt={name} />
+          <MediaPoster image={poster_path} alt={name} className="-z-10"/>
         </div>
       </Link>
-      <MediaCard.Content className="px-2 2xl:px-4;">
+      <MediaCard.Content className="">
         <MediaCard.Title>{name}</MediaCard.Title>
         <div className="flex items-center text-muted-foreground space-x-1">
           <Ratings rating={(vote_average / 10) * 5} variant="yellow" />

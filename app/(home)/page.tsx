@@ -22,19 +22,10 @@ export default async function Home() {
     }
   );
 
-  const item = getRandomItems(movie.results, 1).pop();
-  let heroMovie = null
-  if(item) {
-    heroMovie = await Service.movie.detail<WithVideos>(item?.id, {
-      append_to_response: 'videos'
-    })
-  }
- 
-
   return (
     <div className="space-y-4">
-      {heroMovie && <MovieHero movies={[heroMovie]} />}
-      <div className="space-y-4 py-4 px-[--slide-padding] lg:px-[--slide-padding-lg] overflow-x-clip overflow-y-visible">
+      <MovieHero movies={movie.results} />
+      <div className="space-y-4 py-4">
         <TrendCarousel items={movie.results} title="Trending Movies" />
         <TrendCarousel items={tv.results} title="Trending TV" />
       </div>

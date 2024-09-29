@@ -40,7 +40,7 @@ export const MediaPoster: React.FC<MediaPosterProps> = ({
 
   return (
     <Image
-      className={cn("size-full rounded-md object-cover", className)}
+      className={cn("size-full  object-cover", className)}
       src={src}
       alt={alt}
       priority={priority}

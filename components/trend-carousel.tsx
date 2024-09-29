@@ -82,7 +82,6 @@ export const TrendCarousel: React.FC<TrendCarouselProps> = ({
       </div>
       <Carousel
         setApi={setApi}
-        className="section"
         opts={{
           slidesToScroll: "auto",
         }}
