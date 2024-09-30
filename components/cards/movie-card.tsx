@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { Movie } from "@/services/models/movie";
@@ -11,8 +12,8 @@ export const MovieCard: React.FC<Movie> = (props) => {
     <>
       <MediaCard.Root className="poster">
         <Link href={`/movie/${id}`} key={id} prefetch={false}>
-          <div className="aspect-poster relative">
-            <MediaPoster image={poster_path} alt={title} className="-z-10"/>
+          <div className="aspect-poster">
+            <MediaPoster image={poster_path} alt={title} />
           </div>
         </Link>
         <MediaCard.Content className="">

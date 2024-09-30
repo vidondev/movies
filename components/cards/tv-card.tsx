@@ -16,8 +16,8 @@ export const TvCard: React.FC<TvShow> = ({
   return (
     <MediaCard.Root className="poster">
       <Link href={`/tv/${id}`} key={id} prefetch={false}>
-        <div className="aspect-poster relative">
-          <MediaPoster image={poster_path} alt={name} className="-z-10"/>
+        <div className="aspect-poster">
+          <MediaPoster image={poster_path} alt={name} />
         </div>
       </Link>
       <MediaCard.Content className="">

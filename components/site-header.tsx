@@ -5,7 +5,12 @@ import { Menu, Search, Settings } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center px-5 py-3 sticky top-0 bg-white z-20">
+    <header className="grid grid-cols-3 lg:flex lg:justify-between items-center px-5 py-3 sticky top-0 bg-white z-20">
+      <div className="lg:hidden">
+        <Button size="icon" variant={`outline`}>
+          <Menu size={16} />
+        </Button>
+      </div>
       <div className="logo">
         <Link href="/">
           <Icons.Logo
@@ -13,11 +18,6 @@ export default function Header() {
             strokeWidth={1}
           />
         </Link>
-      </div>
-      <div className="lg:hidden">
-        <Button size="icon" variant={`outline`}>
-          <Menu size={16} />
-        </Button>
       </div>
       <div className="ml-auto flex space-x-2">
         <Button size="icon" variant={`outline`}>

@@ -95,13 +95,20 @@
 
 .poster {
   & > a {
-   @apply block rounded-md transition duration-300 overflow-hidden z-10 ;
-   &:hover {
-    box-shadow: inset rgb(186 182 182) 0px 0px 0px 3px;
-   }
+    @apply block rounded-md transition duration-300 overflow-hidden relative;
+    &::before {
+      content: "";
+      box-shadow: inset rgb(186 182 182) 0px 0px 0px 3px;
+      @apply absolute inset-0 z-10 transition duration-300 opacity-100 opacity-0;
+    }
+    &:hover {
+      &::before {
+        @apply opacity-100;
+      }
+    }
     & > .aspect-poster {
       & img {
-        @apply relative transition  duration-300 ;
+        @apply relative transition  duration-300;
       }
     }
     &:hover > .aspect-poster img {

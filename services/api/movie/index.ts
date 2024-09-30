@@ -25,7 +25,7 @@ const PREFIX = `/movie`;
  * @see https://developer.themoviedb.org/reference/movie-top-rated-list
  * @see https://developer.themoviedb.org/reference/movie-upcoming-list
  */
-const list = (type: MovieType, params: MovieListRequestParams) =>
+const list = (type: MovieType, params?: MovieListRequestParams) =>
   api.fetcher<ListResponse<Movie>>({
     endpoint: `${PREFIX}/${type}`,
     params: params,

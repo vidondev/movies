@@ -2,22 +2,26 @@
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import {
-  Box,
   CalendarDays,
   Clapperboard,
   Heart,
-  Home,
+  LucideIcon,
   Play,
   Star,
   Tv,
   UserRound,
 } from "lucide-react";
-import { NavItem } from "./site-nav";
 import Link from "next/link";
 import { useActiveNav } from "@/hooks/useActiveNav";
-import { Icons } from "./icons";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
+type NavItem = {
+  title: string;
+  href: string;
+  Icon?: LucideIcon;
+  description?: string;
+  items?: NavItem[];
+};
 
 export function Sidebar({ className }: SidebarProps) {
   const navItems: NavItem[] = [
@@ -89,13 +93,8 @@ export function Sidebar({ className }: SidebarProps) {
   ];
 
   return (
-    <div className="pl-4">
-      <div
-        className={cn(
-          className,
-          "hidden lg:block border rounded-md sticky top-[72px]"
-        )}
-      >
+    <div className="pl-4 hidden lg:block">
+      <div className={cn(className, " border rounded-md sticky top-[72px]")}>
         <div className="py-4 space-y-4">
           {navItems.map((navItem, index) => {
             return (
