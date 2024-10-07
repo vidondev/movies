@@ -5,13 +5,20 @@ import { Movie } from "@/services/models/movie";
 import { MediaCard } from "./media-card";
 import { MediaPoster } from "../images/poster";
 import { Ratings } from "../ratings";
+import kebabCase from "lodash/kebabCase";
 
 export const MovieCard: React.FC<Movie> = (props) => {
-  const { id, poster_path, title, vote_average, release_date } = props;
+  const { id, poster_path, title, vote_average, release_date, original_title } =
+    props;
+
   return (
     <>
       <MediaCard.Root className="poster">
-        <Link href={`/movie/${id}`} key={id} prefetch={false}>
+        <Link
+          href={`/movies/${id}-${kebabCase(original_title)}`}
+          key={id}
+          prefetch={false}
+        >
           <div className="aspect-poster">
             <MediaPoster image={poster_path} alt={title} />
           </div>

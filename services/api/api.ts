@@ -1,3 +1,4 @@
+import { notFound, redirect } from "next/navigation";
 import apiConfig from "./config";
 
 type FetcherOptions = {
@@ -75,8 +76,12 @@ const fetcher: Fetcher = async ({ endpoint, params }, init) => {
 
   const url = `${apiConfig.baseUrl}/${endpoint}?${_params}`;
   const response = await fetch(url, _init);
+  console.log("🚀 ~ constfetcher:Fetcher= ~ url:", url, _params);
 
   if (!response.ok) {
+    if (response.status === 404) {
+      notFound();
+    }
     throw new Error(
       `API request failed with status ${response.status}: ${response.statusText}`
     );

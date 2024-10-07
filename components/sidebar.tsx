@@ -32,22 +32,22 @@ export function Sidebar({ className }: SidebarProps) {
       items: [
         {
           title: "Popular",
-          href: "/movies/popular",
+          href: "/movies/category/popular",
           Icon: Heart,
         },
         {
           title: "Now Playing",
-          href: "/movies/now-playing",
+          href: "/movies/category/now-playing",
           Icon: Play,
         },
         {
           title: "Upcoming",
-          href: "/movies/upcoming",
+          href: "/movies/category/upcoming",
           Icon: CalendarDays,
         },
         {
           title: "Top Rated",
-          href: "/movies/top-rated",
+          href: "/movies/category/top-rated",
           Icon: Star,
         },
       ],
