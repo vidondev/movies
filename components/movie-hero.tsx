@@ -86,7 +86,7 @@ export const MovieHero: React.FC<MovieHeroProps> = ({ movies, count = 1 }) => {
         </div>
         <div className="space-x-2">
           <Button size={`lg`} asChild>
-            <Link href={`/movie/${item.id}`}>
+            <Link href={`/movies/${item.id}`}>
               Details <ArrowRight className="ml-2 size-4" />
             </Link>
           </Button>

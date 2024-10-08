@@ -93,24 +93,27 @@ export function Sidebar({ className }: SidebarProps) {
   ];
 
   return (
-    <div className="pl-4 hidden lg:block">
-      <div className={cn(className, " border rounded-md sticky top-[72px]")}>
-        <div className="py-4 space-y-4">
-          {navItems.map((navItem, index) => {
-            return (
-              <div className="px-3 py-2" key={`nav-item-${index}`}>
-                <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-                  {navItem.title}
-                </h2>
-                <div className="space-y-1">
-                  {navItem.items?.map((item, index) => (
-                    <SiteNavItem {...item} key={`item-${index}`} />
-                  ))}
-                </div>
+    <div
+      className={cn(
+        className,
+        "lg:border lg:rounded-md lg:sticky lg:top-[72px]"
+      )}
+    >
+      <div className="py-4 space-y-4">
+        {navItems.map((navItem, index) => {
+          return (
+            <div className="px-3 py-2" key={`nav-item-${index}`}>
+              <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+                {navItem.title}
+              </h2>
+              <div className="space-y-1">
+                {navItem.items?.map((item, index) => (
+                  <SiteNavItem {...item} key={`item-${index}`} />
+                ))}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

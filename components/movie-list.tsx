@@ -1,3 +1,5 @@
+"use client";
+
 import { Movie } from "@/services/models/movie";
 import { MovieCard } from "./cards/movie-card";
 

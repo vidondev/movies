@@ -17,22 +17,26 @@ import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { Label } from "./ui/label";
 import { useState } from "react";
 import { Badge } from "./ui/badge";
+import { useFilters } from "@/hooks/useFilters";
 
 interface MovieFiltersProps {
   genres: Genre[];
 }
 
 export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
-  const [genreIds, setGenreIds] = useState([]);
+  const { saveFilters, setFilter, getFilter, clearFilters, count } = useFilters(
+    "movie",
+    "/movies/category/popular"
+  );
+
+  const genreFilters = getFilter("with_genres");
 
   return (
     <Sheet>
       <SheetTrigger className={cn(buttonVariants({ variant: "outline" }))}>
         <SlidersHorizontal className="mr-2 size-4" /> Filters
-        {genreIds.length > 0 && (
-          <Badge className="ml-2 px-2 text-xs leading-none">
-            {genreIds.length}
-          </Badge>
+        {count > 0 && (
+          <Badge className="ml-2 px-2 text-xs leading-none">{count}</Badge>
         )}
       </SheetTrigger>
       <SheetContent className="flex flex-col px-0">
@@ -48,6 +52,10 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
                 type="multiple"
                 variant="outline"
                 className="grid grid-cols-3"
+                value={genreFilters ? genreFilters.split(",") : []}
+                onValueChange={(value) =>
+                  setFilter({ with_genres: value.join(",") })
+                }
               >
                 {genres.map((genre) => (
                   <ToggleGroupItem
@@ -64,10 +72,12 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
         </ScrollArea>
 
         <SheetFooter className="gap-2 px-4 md:gap-0 md:px-6">
-          <Button size="lg" variant="outline">
+          <Button size="lg" variant="outline" onClick={clearFilters}>
             Clear
           </Button>
-          <SheetClose className={buttonVariants()}>Save Changes</SheetClose>
+          <SheetClose className={buttonVariants()} onClick={saveFilters}>
+            Save Changes
+          </SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
