@@ -12,4 +12,6 @@ export const availableParams = [
   "vote_average.lte",
   "vote_count.gte",
   "vote_count.lte",
+  "with_runtime.gte",
+  "with_runtime.lte",
 ];

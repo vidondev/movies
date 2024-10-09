@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { SlidersHorizontal } from "lucide-react";
+import { CalendarIcon, SlidersHorizontal } from "lucide-react";
 import { Button, buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "./ui/scroll-area";
@@ -18,17 +18,23 @@ import { Label } from "./ui/label";
 import { useState } from "react";
 import { Badge } from "./ui/badge";
 import { useFilters } from "@/hooks/useFilters";
+import { usePathname } from "next/navigation";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Calendar } from "./ui/calendar";
+import { FilterGenre } from "./filter-genre";
+import { FilterDate } from "./filter-date";
+import { FilterUserScore } from "./filter-user-score";
 
 interface MovieFiltersProps {
   genres: Genre[];
 }
 
 export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
-  const { saveFilters, setFilter, getFilter, clearFilters, count } = useFilters(
-    "movie",
-    "/movies/category/popular"
-  );
+  const pathname = usePathname();
+  const { saveFilters, setFilter, getFilter, clearFilters, count, filters } =
+    useFilters("movie", pathname);
 
+  console.log("===>", filters);
   const genreFilters = getFilter("with_genres");
 
   return (
@@ -44,30 +50,83 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
           <SheetTitle>Filters</SheetTitle>
         </SheetHeader>
 
-        <ScrollArea className="px-4 md:px-6">
+        <ScrollArea className="px-4 md:px-6 py-4">
           <div className="space-y-8">
-            <div className="space-y-2">
-              <Label className="text-muted-foreground">Genres</Label>
-              <ToggleGroup
-                type="multiple"
-                variant="outline"
-                className="grid grid-cols-3"
-                value={genreFilters ? genreFilters.split(",") : []}
-                onValueChange={(value) =>
-                  setFilter({ with_genres: value.join(",") })
+            <FilterGenre
+              genres={genres}
+              value={genreFilters ? genreFilters.split(",") : []}
+              onChange={(value) => setFilter({ with_genres: value.join(",") })}
+            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <FilterDate
+                label="From"
+                align="start"
+                value={getFilter("primary_release_date.gte")}
+                disableAfter={getFilter("primary_release_date.lte")}
+                onChange={(value) =>
+                  setFilter({ "primary_release_date.gte": value })
                 }
-              >
-                {genres.map((genre) => (
-                  <ToggleGroupItem
-                    value={genre.id + ""}
-                    aria-label={`Toggle ${genre.name}`}
-                    className="text-nowrap"
-                  >
-                    {genre.name}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
+              />
+              <FilterDate
+                label="To"
+                align="end"
+                value={getFilter("primary_release_date.lte")}
+                disableBefore={getFilter("primary_release_date.gte")}
+                onChange={(value) =>
+                  setFilter({ "primary_release_date.lte": value })
+                }
+              />
             </div>
+            <FilterUserScore
+              label="User Score"
+              min={0}
+              max={10}
+              steps={11}
+              stepSize={1}
+              value={[
+                getFilter("vote_average.gte") || 0,
+                getFilter("vote_average.lte") || 10,
+              ]}
+              onChange={(value) => {
+                const [gte, lte] = value;
+                setFilter({
+                  "vote_average.gte": gte + "",
+                  "vote_average.lte": lte + "",
+                });
+              }}
+            />
+            <FilterUserScore
+              label="Minimum User Votes"
+              min={0}
+              max={500}
+              steps={11}
+              stepSize={50}
+              value={[getFilter("vote_count.gte") || 0]}
+              onChange={(value) => {
+                const [gte] = value;
+                setFilter({
+                  "vote_count.gte": gte + "",
+                });
+              }}
+            />
+            <FilterUserScore
+              label="Runtime"
+              min={0}
+              max={400}
+              steps={26}
+              stepSize={15}
+              value={[
+                getFilter("with_runtime.gte") || 0,
+                getFilter("with_runtime.lte") || 400,
+              ]}
+              onChange={(value) => {
+                const [gte, lte] = value;
+                setFilter({
+                  "with_runtime.gte": gte + "",
+                  "with_runtime.lte": lte + "",
+                });
+              }}
+            />
           </div>
         </ScrollArea>
 
