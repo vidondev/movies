@@ -4,26 +4,22 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { CalendarIcon, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import { Button, buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "./ui/scroll-area";
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { Label } from "./ui/label";
-import { useState } from "react";
 import { Badge } from "./ui/badge";
 import { useFilters } from "@/hooks/useFilters";
 import { usePathname } from "next/navigation";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Calendar } from "./ui/calendar";
 import { FilterGenre } from "./filter-genre";
 import { FilterDate } from "./filter-date";
-import { FilterUserScore } from "./filter-user-score";
+import { FilterSlider } from "./filter-slider";
 
 interface MovieFiltersProps {
   genres: Genre[];
@@ -34,8 +30,8 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
   const { saveFilters, setFilter, getFilter, clearFilters, count, filters } =
     useFilters("movie", pathname);
 
-  console.log("===>", filters);
   const genreFilters = getFilter("with_genres");
+  console.log("===>", filters);
 
   return (
     <Sheet>
@@ -45,7 +41,7 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
           <Badge className="ml-2 px-2 text-xs leading-none">{count}</Badge>
         )}
       </SheetTrigger>
-      <SheetContent className="flex flex-col px-0">
+      <SheetContent className="flex flex-col px-0 w-full" aria-describedby={undefined} >
         <SheetHeader className="px-4 md:px-6">
           <SheetTitle>Filters</SheetTitle>
         </SheetHeader>
@@ -77,7 +73,7 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
                 }
               />
             </div>
-            <FilterUserScore
+            <FilterSlider
               label="User Score"
               min={0}
               max={10}
@@ -87,6 +83,8 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
                 getFilter("vote_average.gte") || 0,
                 getFilter("vote_average.lte") || 10,
               ]}
+              skipSteps={0}
+              skip={false}
               onChange={(value) => {
                 const [gte, lte] = value;
                 setFilter({
@@ -95,12 +93,14 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
                 });
               }}
             />
-            <FilterUserScore
+            <FilterSlider
               label="Minimum User Votes"
               min={0}
               max={500}
               steps={11}
               stepSize={50}
+              skipSteps={0}
+              skip={false}
               value={[getFilter("vote_count.gte") || 0]}
               onChange={(value) => {
                 const [gte] = value;
@@ -109,12 +109,14 @@ export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
                 });
               }}
             />
-            <FilterUserScore
+            <FilterSlider
               label="Runtime"
               min={0}
               max={400}
               steps={26}
               stepSize={15}
+              skipSteps={8}
+              skip={true}
               value={[
                 getFilter("with_runtime.gte") || 0,
                 getFilter("with_runtime.lte") || 400,

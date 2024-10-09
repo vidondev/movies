@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
-import { useState } from "react";
+import { Separator } from "./ui/separator";
 
 interface FilterUserScoreProps {
   label: string;
@@ -11,9 +11,11 @@ interface FilterUserScoreProps {
   max: number;
   steps: number;
   stepSize: number;
+  skip:boolean
+  skipSteps:number
 }
 
-export const FilterUserScore: React.FC<FilterUserScoreProps> = ({
+export const FilterSlider: React.FC<FilterUserScoreProps> = ({
   label,
   value,
   onChange,
@@ -21,6 +23,8 @@ export const FilterUserScore: React.FC<FilterUserScoreProps> = ({
   max,
   steps,
   stepSize,
+  skipSteps = 0,
+  skip
 }) => {
   return (
     <div className="space-y-2 ">
@@ -35,21 +39,16 @@ export const FilterUserScore: React.FC<FilterUserScoreProps> = ({
           minStepsBetweenThumbs={1}
         />
 
-        <div className="mt-4 flex justify-between border-t ">
+        <div className="flex justify-between -mx-2 mt-2">
           {Array.from({ length: steps }, (_, i) => (
-            <div key={i} className="relative pt-2">
-              <span
-                className={cn(
-                  "text-[9px]",
-                  value.indexOf(i) > -1 && "text-muted-foreground"
-                )}
-              >
-                {i * stepSize}
-              </span>
-              <span className="absolute left-1/2 top-0 block h-1/3 w-px -translate-x-px bg-muted" />
-            </div>
+              <div className={cn("flex flex-col  items-center justify-start", skip ?  'grow-0 relative pb-4' : 'flex-1')} key={`step-${i}`}>
+                <Separator orientation="vertical" className="h-3" />
+                {((skip && i%skipSteps === 0) || !skip) && <span className={cn("text-[9px]", skip && 'absolute top-4')}>{i*stepSize}</span>}
+              </div>
           ))}
+                 
         </div>
+
       </div>
     </div>
   );

@@ -74,7 +74,7 @@ const fetcher: Fetcher = async ({ endpoint, params }, init) => {
     headers: _headers,
   };
 
-  const url = `${apiConfig.baseUrl}/${endpoint}?${_params}`;
+  const url = `${apiConfig.baseUrl}${endpoint}?${_params}`;
   const response = await fetch(url, _init);
   console.log("🚀 ~ constfetcher:Fetcher= ~ url:", url, _params);
 

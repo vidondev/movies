@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { filterParams } from "@/lib/utils";
+import { countBy, isEqual, uniq } from "lodash";
 
 export const useFilters = (type: "movie" | "tv", pathname?: string) => {
   const router = useRouter();
@@ -9,11 +10,7 @@ export const useFilters = (type: "movie" | "tv", pathname?: string) => {
 
   useEffect(() => {
     const activeParams = Object.fromEntries(searchParams);
-    console.log(
-      "🚀 ~ useEffect ~ activeParams:",
-      activeParams,
-      filterParams(activeParams)
-    );
+    console.log("🚀 ~ useEffect ~ activeParams:", activeParams);
     setFilters({ ...filterParams(activeParams) });
   }, [searchParams]);
 
@@ -22,7 +19,6 @@ export const useFilters = (type: "movie" | "tv", pathname?: string) => {
   };
 
   const setFilter = (value: Record<string, string>) => {
-    console.log("==>", filters, value);
     setFilters({
       ...filters,
       ...value,
@@ -35,12 +31,18 @@ export const useFilters = (type: "movie" | "tv", pathname?: string) => {
   };
 
   const clearFilters = () => {
+    if (!pathname) return;
     setFilters({});
-    if (pathname) router.replace(pathname);
+    router.replace(pathname);
   };
 
-  const count = Object.values(filters).filter(Boolean).length;
+  // const count = Object.values(filters).filter(Boolean).length;
+  const count = uniq(Object.keys(filters).map( key => {
+    const [primaryKey] =  key.split(".")
+    return primaryKey
+  })).length
 
+  
   return {
     filters,
     count,

@@ -15,8 +15,6 @@ export const FilterGenre: React.FC<FilterGenreProps> = ({
   onChange,
   value,
 }) => {
-  const pathname = usePathname();
-
   return (
     <div className="space-y-2">
       <Label className="text-muted-foreground">Genres</Label>
@@ -29,6 +27,7 @@ export const FilterGenre: React.FC<FilterGenreProps> = ({
       >
         {genres.map((genre) => (
           <ToggleGroupItem
+          key={`genres-${genre.id}`}
             value={genre.id + ""}
             aria-label={`Toggle ${genre.name}`}
             className="text-nowrap"

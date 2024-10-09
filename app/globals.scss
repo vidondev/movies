@@ -78,6 +78,7 @@
 
   .aspect-poster {
     aspect-ratio: 4/3;
+    @apply relative;
   }
 }
 
