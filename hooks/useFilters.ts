@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { filterParams } from "@/lib/utils";
-import { countBy, isEqual, uniq } from "lodash";
+import { uniq } from "lodash";
 
 export const useFilters = (type: "movie" | "tv", pathname?: string) => {
   const router = useRouter();
@@ -27,6 +27,7 @@ export const useFilters = (type: "movie" | "tv", pathname?: string) => {
 
   const saveFilters = () => {
     const searchParams = new URLSearchParams(filters);
+    searchParams.delete("page");
     router.replace(`${pathname}?${searchParams.toString()}`);
   };
 
@@ -37,12 +38,15 @@ export const useFilters = (type: "movie" | "tv", pathname?: string) => {
   };
 
   // const count = Object.values(filters).filter(Boolean).length;
-  const count = uniq(Object.keys(filters).map( key => {
-    const [primaryKey] =  key.split(".")
-    return primaryKey
-  })).length
+  const count = uniq(
+    Object.keys(filters)
+      .filter((filter) => filter !== "page" && filter !== "sort_by")
+      .map((key) => {
+        const [primaryKey] = key.split(".");
+        return primaryKey;
+      })
+  ).length;
 
-  
   return {
     filters,
     count,

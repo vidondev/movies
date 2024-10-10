@@ -83,7 +83,7 @@
 }
 
 .app-container {
-  @apply grid grid-cols-1 lg:grid-cols-layout min-h-svh;
+  @apply grid grid-cols-1 lg:grid-cols-layout;
 }
 
 .header {

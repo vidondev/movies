@@ -6,6 +6,7 @@ import { MediaCard } from "./media-card";
 import { MediaPoster } from "../images/poster";
 import { Ratings } from "../ratings";
 import kebabCase from "lodash/kebabCase";
+import { format } from "date-fns";
 
 export const MovieCard: React.FC<Movie> = (props) => {
   const { id, poster_path, title, vote_average, release_date, original_title } =
@@ -29,7 +30,9 @@ export const MovieCard: React.FC<Movie> = (props) => {
             <Ratings rating={(vote_average / 10) * 5} variant="yellow" />
             <span>{vote_average.toFixed(1)}</span>
           </div>
-          <MediaCard.Excerpt>{release_date}</MediaCard.Excerpt>
+          <MediaCard.Excerpt>
+            {release_date && format(release_date, "PP")}
+          </MediaCard.Excerpt>
         </MediaCard.Content>
       </MediaCard.Root>
     </>

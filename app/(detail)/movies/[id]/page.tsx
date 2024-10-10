@@ -1,18 +1,15 @@
+"use client";
+import { MediaBackdrop } from "@/components/media-backdrop";
+import { tmdbImage } from "@/config/image";
 import { Service } from "@/services/api";
-import kebabCase from "lodash/kebabCase";
+import { kebabCase } from "lodash";
 import { RedirectType, notFound, redirect } from "next/navigation";
 
-interface DetailLayoutProps {
-  params: {
-    id: string;
-  };
-  children: React.ReactNode;
-}
-
-export default async function DetailLayout({
+export default async function MovieDetail({
   params,
-  children,
-}: DetailLayoutProps) {
+}: {
+  params: { id: string };
+}) {
   const { id } = params;
   const [movie_id, ...args] = id.split("-");
   if (isNaN(parseInt(movie_id))) return notFound();
@@ -26,5 +23,12 @@ export default async function DetailLayout({
     );
   }
 
-  return <div>{children}</div>;
+  return (
+    <div className="relative h-[510px]">
+      <MediaBackdrop
+        image={tmdbImage.backdrop(movie.backdrop_path)}
+        alt={movie.original_title}
+      />
+    </div>
+  );
 }

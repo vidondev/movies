@@ -29,9 +29,9 @@ export default function RootLayout({
             <Sidebar />
           </div>
           <main className="lg:ml-10">
-            <div className="lg:rounded-tl-lg bg-accent fixed w-full h-full" />
-            <div className="lg:rounded-tl-lg bg-accent fixed w-full h-[var(--radius)] z-20" />
-            <div className="py-[var(--radius)] relative">{children}</div>
+            <div className="lg:rounded-tl-lg bg-accent fixed w-full h-full -z-10" />
+            <div className="lg:rounded-tl-lg bg-accent fixed w-full h-[var(--radius)] z-20 lg:block hidden" />
+            <div className="pt-[var(--radius)] py-4">{children}</div>
           </main>
         </div>
         <TailwindIndicator />
