@@ -1,3 +1,4 @@
+import { Cast, Crew } from "../models/credits";
 import { Video } from "../models/videos";
 
 export type ListResponse<T> = {
@@ -9,6 +10,11 @@ export type ListResponse<T> = {
 
 export type WithVideos = {
   videos: {
-    results: Video[]
-  }
-}
+    results: Video[];
+  };
+};
+
+export type WithCredits = {
+  cast: Cast[];
+  crew: Crew[];
+};

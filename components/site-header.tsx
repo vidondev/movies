@@ -19,7 +19,7 @@ export default function Header() {
   }, [pathname]);
 
   return (
-    <header className="grid grid-cols-3 lg:flex lg:justify-between items-center px-5 py-3 sticky top-0 bg-white z-20">
+    <header className="grid grid-cols-3 lg:flex lg:justify-between items-center px-5 py-3 sticky top-0 bg-background z-20">
       <div className="lg:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger className={cn(buttonVariants({ variant: "outline" }))}>

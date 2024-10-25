@@ -88,7 +88,7 @@ export const TrendCarousel: React.FC<TrendCarouselProps> = ({
       >
         <CarouselContent>
           {items.map((item, index) => (
-            <CarouselItem key={`item-${index}`} className="menu-item">
+            <CarouselItem key={`item-${index}`} className="carousel-item">
               {item.media_type === "movie" && (
                 <MovieCard key={item.id} {...item} />
               )}

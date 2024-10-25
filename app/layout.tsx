@@ -28,11 +28,7 @@ export default function RootLayout({
           <div className="pl-0 lg:pl-4 hidden lg:block">
             <Sidebar />
           </div>
-          <main className="lg:ml-10">
-            <div className="lg:rounded-tl-lg bg-accent fixed w-full h-full -z-10" />
-            <div className="lg:rounded-tl-lg bg-accent fixed w-full h-[var(--radius)] z-20 lg:block hidden" />
-            <div className="pt-[var(--radius)] py-4">{children}</div>
-          </main>
+          <main className="lg:ml-10">{children}</main>
         </div>
         <TailwindIndicator />
       </body>

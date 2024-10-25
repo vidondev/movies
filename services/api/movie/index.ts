@@ -33,12 +33,15 @@ const list = (type: MovieType, params?: MovieListRequestParams) =>
 
 /**
  * Fetches detailed information about a specific movie.
- * @param {number} movie_id - Movie Id for the movie details.
+ * @param {number|string} movie_id - Movie Id for the movie details.
  * @param {MovieDetailsRequestParams} params - The parameters for the movie details request, including any additional data to append.
  * @returns {Promise<MovieDetails>} A promise that resolves to the detailed information about the movie.
  * @see https://developer.themoviedb.org/reference/movie-details
  */
-const detail = <T>(movie_id: number, params?: MovieDetailsRequestParams) =>
+const detail = <T>(
+  movie_id: number | string,
+  params?: MovieDetailsRequestParams
+) =>
   api.fetcher<MovieDetails & T>({
     endpoint: `${PREFIX}/${movie_id}`,
     params: params,
