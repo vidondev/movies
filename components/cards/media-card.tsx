@@ -3,7 +3,7 @@ import { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const Root: React.FC<ComponentProps<"div">> = ({ className, ...props }) => {
-  return <div className={cn(className)} {...props} />;
+  return <div className={cn("relative", className)} {...props} />;
 };
 
 const Content: React.FC<ComponentProps<"div">> = ({ className, ...props }) => {
@@ -31,8 +31,13 @@ const Excerpt: React.FC<ComponentProps<"p">> = ({ className, ...props }) => {
   );
 };
 
+const Poster: React.FC<ComponentProps<"div">> = ({ className, ...props }) => {
+  return <div className={cn("relative aspect-square", className)} {...props} />;
+};
+
 export const MediaCard = {
   Root,
+  Poster,
   Content,
   Title,
   Excerpt,

@@ -18,3 +18,12 @@ export type WithCredits = {
   cast: Cast[];
   crew: Crew[];
 };
+
+type Keyword = {
+  id: number;
+  name: string;
+};
+
+export type WithKeywords = {
+  keywords: Keyword[];
+};

@@ -40,3 +40,11 @@ export function filterParams(
     )
   );
 }
+
+export function formatValue(value: any, formatter?: any) {
+  return value ? (formatter ? formatter(value) : value) : "—";
+}
+
+export function joiner(arr: any[], key: string) {
+  return arr.length ? arr.map((item) => item[key]).join(", ") : "—";
+}

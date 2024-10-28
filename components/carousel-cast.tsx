@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -11,20 +12,15 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { MovieWithMediaType } from "@/services/models/movie";
-import { TvShowWithMediaType } from "@/services/models/tv";
-import { MovieCard } from "./cards/movie-card";
-import { TvCard } from "./cards/tv-card";
+import { Cast } from "@/services/models/credits";
+import { MediaCastCard } from "./media-cast-card";
 
-interface TrendCarouselProps {
+interface CarouselCastProps {
   title?: string;
-  items: MovieWithMediaType[] | TvShowWithMediaType[];
+  items: Cast[];
 }
 
-export const TrendCarousel: React.FC<TrendCarouselProps> = ({
-  title,
-  items,
-}) => {
+export const CarouselCast: React.FC<CarouselCastProps> = ({ title, items }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
@@ -55,6 +51,9 @@ export const TrendCarousel: React.FC<TrendCarouselProps> = ({
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl tracking-tight">{title}</h2>
+        <Link href={`/`} className="mr-auto ml-4">
+          <Button>View All</Button>
+        </Link>
         <div className="flex space-x-2">
           <Button
             size="icon"
@@ -87,10 +86,7 @@ export const TrendCarousel: React.FC<TrendCarouselProps> = ({
         <CarouselContent>
           {items.map((item, index) => (
             <CarouselItem key={`item-${index}`} className="carousel-item">
-              {item.media_type === "movie" && (
-                <MovieCard key={item.id} {...item} />
-              )}
-              {item.media_type === "tv" && <TvCard key={item.id} {...item} />}
+              <MediaCastCard key={item.id} {...item} />
             </CarouselItem>
           ))}
         </CarouselContent>

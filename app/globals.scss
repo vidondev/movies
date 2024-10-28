@@ -97,6 +97,15 @@
     aspect-ratio: 4/3;
     @apply relative;
   }
+
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .app-container {

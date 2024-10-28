@@ -8,18 +8,8 @@ const Root: React.FC<ComponentProps<"div">> = ({ className, ...props }) => {
   return <div className={cn("", className)} {...props} />;
 };
 
-const Backdrop: React.FC<ComponentProps<"div">> = ({
-  children,
-  className,
-  ...props
-}) => {
-  return (
-    <div className={cn("container", className)} {...props}>
-      <div className="md:h-hero relative hidden aspect-poster w-full md:block">
-        {children}
-      </div>
-    </div>
-  );
+const Backdrop: React.FC<ComponentProps<"div">> = ({ className, ...props }) => {
+  return <div className={cn(className)} {...props} />;
 };
 
 const Hero: React.FC<ComponentProps<"div">> = ({
