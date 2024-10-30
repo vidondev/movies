@@ -5,6 +5,7 @@ interface DetailLayoutProps {
     id: string;
   };
   children: React.ReactNode;
+  team: React.ReactNode;
 }
 
 export async function generateMetadata({ params }: DetailLayoutProps) {
@@ -15,6 +16,9 @@ export async function generateMetadata({ params }: DetailLayoutProps) {
   };
 }
 
-export default async function DetailLayout({ children }: DetailLayoutProps) {
+export default async function DetailLayout({
+  children,
+  team,
+}: DetailLayoutProps) {
   return <div className="h-full">{children}</div>;
 }

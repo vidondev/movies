@@ -1,34 +1,39 @@
-import { MediaCard } from "@/components/cards/media-card";
-import { CarouselCast } from "@/components/carousel-cast";
 import { MediaPoster } from "@/components/images/poster";
 import { MediaBackdrop } from "@/components/media-backdrop";
 import { MediaCastCard } from "@/components/media-cast-card";
 import { MediaDetailView } from "@/components/media-detail-view";
-import { MediaHero } from "@/components/media-hero";
 import { MediaTrailerDialog } from "@/components/media-trailer-dialog";
 import { Ratings } from "@/components/ratings";
 import { Badge } from "@/components/ui/badge";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import {
-  Tabs,
-  TabsContent,
-  TabsLink,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import { tmdbImage } from "@/config/image";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "@/lib/format";
 import { formatTime, formatValue, joiner } from "@/lib/utils";
 import { Service } from "@/services/api";
-import { WithCredits, WithKeywords, WithVideos } from "@/services/api/types";
-import { divide, groupBy, head, kebabCase, toPairs, values } from "lodash";
-import { CalendarDays, Clock, Eye } from "lucide-react";
+import {
+  WithCredits,
+  WithExternalIds,
+  WithKeywords,
+  WithVideos,
+} from "@/services/api/types";
+import { Crew } from "@/services/models/credits";
+import { groupBy, head, kebabCase, reduce, toPairs } from "lodash";
+import {
+  CalendarDays,
+  Clock,
+  Eye,
+  Facebook,
+  Instagram,
+  Twitter,
+} from "lucide-react";
 import Link from "next/link";
 import { RedirectType, notFound, redirect } from "next/navigation";
+import { Link as LinkIcon } from "lucide-react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 export default async function MovieDetail({
   params,
@@ -44,20 +49,10 @@ export default async function MovieDetail({
       credits: WithCredits;
     } & {
       keywords: WithKeywords;
-    }
+    } & { external_ids: WithExternalIds }
   >(parseInt(movie_id), {
-    append_to_response: "videos,credits,keywords",
+    append_to_response: "videos,credits,keywords,external_ids",
   });
-  console.log(
-    "🚀 ~ movie ~ movie:",
-    groupBy(
-      movie.credits.crew.filter(
-        (crew) =>
-          crew.department === "Directing" || crew.department === "Writing"
-      ),
-      "original_name"
-    )
-  );
 
   const crews = toPairs(
     groupBy(
@@ -67,11 +62,11 @@ export default async function MovieDetail({
       ),
       "original_name"
     )
-  ).map((crew) => {
+  ).map(([name, crew]) => {
     return {
-      name: crew[0],
-      jobs: crew[1].map((c) => c.job).join(", "),
-      profile_path: head(crew[1])?.profile_path,
+      name: name,
+      jobs: crew.map((c) => c.job).join(", "),
+      profile_path: head(crew)?.profile_path,
     };
   });
   if (kebabCase(movie.title) !== kebabCase(args.join("-"))) {
@@ -113,10 +108,11 @@ export default async function MovieDetail({
       ),
     },
   ];
+  console.log("🚀 ~ movie:", movie);
 
   return (
     <MediaDetailView.Root className="relative h-full bg-accent">
-      <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden rounded-l-lg !rounded-b-none">
+      <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden lg:rounded-l-lg lg:!rounded-b-none z-0">
         <MediaBackdrop alt={movie.original_title} image={movie.backdrop_path} />
       </MediaDetailView.Backdrop>
       <MediaDetailView.Content className="space-y-5">
@@ -166,7 +162,7 @@ export default async function MovieDetail({
                 </Link>
               ))}
             </MediaDetailView.Genres>
-            <div className="text-accent">
+            <div className="">
               <h3 className="italic opacity-70">{movie.tagline}</h3>
               <h3 className="text-2xl">Overview</h3>
               <p className="text-sm">{movie.overview}</p>
@@ -183,11 +179,12 @@ export default async function MovieDetail({
         </MediaDetailView.Hero>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-3 space-y-4">
-            <CarouselCast items={movie.credits.cast} title="Top Billed Cast" />
-            <Tabs className="w-full">
+            {/* <CarouselCast items={movie.credits.cast} title="Top Billed Cast" /> */}
+            <Tabs className="w-full" defaultValue="cast">
               <div className="max-w-screen scrollbar-hidden overflow-x-scroll ">
                 <TabsList>
-                  <TabsTrigger value="credits">Credits</TabsTrigger>
+                  <TabsTrigger value="cast">Cast</TabsTrigger>
+                  <TabsTrigger value="crew">Crew</TabsTrigger>
                   <TabsTrigger value="watch">Watch</TabsTrigger>
                   <TabsTrigger value="reviews">Reviews</TabsTrigger>
                   <TabsTrigger value="images">Images</TabsTrigger>
@@ -198,15 +195,104 @@ export default async function MovieDetail({
                   <TabsTrigger value="similar">Similar</TabsTrigger>
                 </TabsList>
               </div>
-              <TabsContent value="credits">
-                Make changes to your account here.
+              <TabsContent value="cast" className="py-4">
+                <div className="grid grid-cols-4 gap-10">
+                  {movie.credits.cast.map((cast) => (
+                    <MediaCastCard {...cast} />
+                  ))}
+                </div>
               </TabsContent>
-              <TabsContent value="watch">
-                Change your password here.
+              <TabsContent value="crew" className="py-4">
+                <div className="space-y-4">
+                  {toPairs(groupBy(movie.credits.crew, "department")).map(
+                    ([name, crews]) => {
+                      return (
+                        <div className="space-y-2">
+                          <h3 className="text-lg">{name}</h3>
+                          <div className="grid grid-cols-4 gap-10">
+                            {toPairs(
+                              reduce(
+                                crews,
+                                function (result, value) {
+                                  result[value.original_name] = {
+                                    ...value,
+                                    job: result[value.original_name]
+                                      ? result[value.original_name].job +
+                                        ", " +
+                                        value.job
+                                      : value.job,
+                                  };
+                                  return result;
+                                },
+                                {} as Record<string, Crew>
+                              )
+                            ).map(([name, crew]) => {
+                              return (
+                                <MediaCastCard
+                                  id={crew.id}
+                                  profile_path={crew.profile_path}
+                                  name={crew.name}
+                                  character={crew.job}
+                                />
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
               </TabsContent>
             </Tabs>
           </div>
           <div>
+            <div className="mb-4">
+              <ul className="flex space-x-4">
+                {movie.external_ids.facebook_id && (
+                  <li>
+                    <Link
+                      href={`https://facebook.com/${movie.external_ids.facebook_id}`}
+                      target="blank"
+                    >
+                      <Facebook />
+                    </Link>
+                  </li>
+                )}
+                {movie.external_ids.twitter_id && (
+                  <li>
+                    <Link
+                      href={`https://x.com/${movie.external_ids.twitter_id}`}
+                      target="blank"
+                    >
+                      <Twitter />
+                    </Link>
+                  </li>
+                )}
+                {movie.external_ids.instagram_id && (
+                  <li>
+                    <Link
+                      href={`https://www.instagram.com/${movie.external_ids.instagram_id}`}
+                      target="blank"
+                    >
+                      <Instagram />
+                    </Link>
+                  </li>
+                )}
+
+                {movie.external_ids.instagram_id &&
+                  movie.external_ids.facebook_id &&
+                  movie.external_ids.twitter_id && (
+                    <li>
+                      <Separator orientation="vertical" />
+                    </li>
+                  )}
+                <li>
+                  <Link href={`${movie.homepage}`} target="blank">
+                    <LinkIcon />
+                  </Link>
+                </li>
+              </ul>
+            </div>
             <ol className="space-y-2">
               {overview.map((overview, index) => (
                 <li key={`item-${index}`}>

@@ -1,9 +1,15 @@
 import Link from "next/link";
 import { MediaCard } from "./cards/media-card";
 import { MediaPoster } from "./images/poster";
-import { Cast } from "@/services/models/credits";
 
-export const MediaCastCard: React.FC<Cast> = ({
+interface MediaCastCardProps {
+  id: number;
+  name: string;
+  profile_path: string;
+  character: string;
+}
+
+export const MediaCastCard: React.FC<MediaCastCardProps> = ({
   id,
   name,
   profile_path,
@@ -11,8 +17,9 @@ export const MediaCastCard: React.FC<Cast> = ({
 }) => (
   <Link href={`/person/${id}`} prefetch={false}>
     <MediaCard.Root>
-      <MediaCard.Poster>
-        <MediaPoster image={profile_path} alt={name} className="rounded-full" />
+      <MediaCard.Poster className="!aspect-poster">
+        <MediaPoster image={profile_path} alt={name} className="rounded-lg" />
+        <MediaCard.Overlay />
       </MediaCard.Poster>
       <MediaCard.Content className="text-center">
         <MediaCard.Title>{name}</MediaCard.Title>

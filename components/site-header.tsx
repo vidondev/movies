@@ -12,11 +12,16 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState("light");
   const pathname = usePathname();
 
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    window.document.querySelector("html")?.setAttribute("class", theme);
+  }, [theme]);
 
   return (
     <header className="grid grid-cols-3 lg:flex lg:justify-between items-center px-5 py-3 sticky top-0 bg-background z-20">
@@ -25,7 +30,10 @@ export default function Header() {
           <SheetTrigger className={cn(buttonVariants({ variant: "outline" }))}>
             <Menu size={16} />
           </SheetTrigger>
-          <SheetContent side={`left`} className="flex flex-col px-0">
+          <SheetContent
+            side={`left`}
+            className="flex flex-col px-0 border border-input"
+          >
             <ScrollArea className="px-4 md:px-6">
               <Sidebar />
             </ScrollArea>
@@ -44,7 +52,13 @@ export default function Header() {
         <Button size="icon" variant={`outline`}>
           <Search size={16} />
         </Button>
-        <Button size="icon" variant={`outline`}>
+        <Button
+          size="icon"
+          variant={`outline`}
+          onClick={() => {
+            setTheme(theme === "dark" ? "light" : "dark");
+          }}
+        >
           <Settings size={16} />
         </Button>
       </div>

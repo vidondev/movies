@@ -17,11 +17,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  team,
 }: Readonly<{
   children: React.ReactNode;
+  team: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className={inter.className}>
         <Header />
         <div className="app-container relative">

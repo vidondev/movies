@@ -96,7 +96,7 @@ export function Sidebar({ className }: SidebarProps) {
     <div
       className={cn(
         className,
-        "lg:border lg:rounded-md lg:sticky lg:top-[72px]"
+        "lg:border lg:border-input lg:rounded-lg lg:sticky lg:top-[72px]"
       )}
     >
       <div className="py-4 space-y-4">

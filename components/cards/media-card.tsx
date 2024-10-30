@@ -31,11 +31,21 @@ const Excerpt: React.FC<ComponentProps<"p">> = ({ className, ...props }) => {
   );
 };
 
+const Overlay: React.FC<ComponentProps<"div">> = ({ className, ...props }) => {
+  return (
+    <div
+      className={cn("absolute inset-0 overlay rounded-lg", className)}
+      {...props}
+    />
+  );
+};
+
 const Poster: React.FC<ComponentProps<"div">> = ({ className, ...props }) => {
   return <div className={cn("relative aspect-square", className)} {...props} />;
 };
 
 export const MediaCard = {
+  Overlay,
   Root,
   Poster,
   Content,

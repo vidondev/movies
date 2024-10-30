@@ -74,10 +74,7 @@ const Overview: React.FC<ComponentProps<"p">> = ({ className, ...props }) => {
 
 const Intro: React.FC<ComponentProps<"p">> = ({ className, ...props }) => {
   return (
-    <div
-      className={cn("space-y-4 bd rounded-lg p-4 text-accent", className)}
-      {...props}
-    />
+    <div className={cn("space-y-4 bd rounded-lg p-4 ", className)} {...props} />
   );
 };
 

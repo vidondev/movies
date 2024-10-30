@@ -2,14 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  --slide-padding: 30px;
-  --slide-padding-lg: 58px;
-  --slide-offset: 12px;
-}
+// :root {
+//   --foreground-rgb: 0, 0, 0;
+//   --background-start-rgb: 214, 219, 220;
+//   --background-end-rgb: 255, 255, 255;
+//   --slide-padding: 30px;
+//   --slide-padding-lg: 58px;
+//   --slide-offset: 12px;
+// }
 
 @layer utilities {
   .text-balance {
@@ -143,7 +143,7 @@
 
 @layer components {
   .bd {
-    background: rgba(0, 0, 0, 0.3);
+    background: hsl(var(--background) / 35%);
     backdrop-filter: blur(10px);
   }
   .overlay {
