@@ -8,7 +8,7 @@ export default async function Home() {
       time_window: "day",
     },
     {
-      language: "en-us",
+      language: "zh-HK",
     }
   );
   const tv = await Service.trending.tv(

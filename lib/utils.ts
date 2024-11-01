@@ -1,4 +1,5 @@
 import { availableParams } from "@/config/site";
+import { Movie } from "@/services/models/movie";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -47,4 +48,15 @@ export function formatValue(value: any, formatter?: any) {
 
 export function joiner(arr: any[], key: string) {
   return arr.length ? arr.map((item) => item[key]).join(", ") : "—";
+}
+
+export function sortByReleaseDate(
+  list: Movie[],
+  order: "asc" | "desc" = "asc"
+) {
+  return list.sort((a, b) => {
+    const dateA = new Date(a.release_date).getTime()
+    const dateB = new Date(b.release_date).getTime()
+    return order === "asc" ? dateA - dateB : dateB - dateA
+  })
 }

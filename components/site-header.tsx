@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const pathname = usePathname();
 
   useEffect(() => {

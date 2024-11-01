@@ -1,3 +1,4 @@
+import { collection } from "./collection";
 import { configuration } from "./configuration";
 import { discover } from "./discover";
 import { genre } from "./genre";
@@ -10,4 +11,5 @@ export const Service = {
   movie,
   trending,
   discover,
+  collection
 };

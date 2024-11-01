@@ -23,7 +23,7 @@ export interface Movie {
 export interface MovieDetails {
   adult: boolean;
   backdrop_path: string;
-  belongs_to_collection: string;
+  belongs_to_collection?: BelongsToCollection;
   budget: number;
   genres: Genre[];
   homepage: string;
@@ -65,6 +65,13 @@ export interface AlternativeTitle {
   iso_3166_1: string;
   title: string;
   type: string;
+}
+
+export type BelongsToCollection = {
+  id: number
+  name: string
+  poster_path: string
+  backdrop_path: string
 }
 
 export type MovieWithMediaType = WithMediaType<Movie, "movie">;

@@ -17,7 +17,17 @@ import {
   WithVideos,
 } from "@/services/api/types";
 import { Crew } from "@/services/models/credits";
-import { groupBy, head, kebabCase, reduce, toPairs } from "lodash";
+import {
+  flatMap,
+  flatten,
+  groupBy,
+  head,
+  kebabCase,
+  mapValues,
+  reduce,
+  toPairs,
+  values,
+} from "lodash";
 import {
   CalendarDays,
   Clock,
@@ -29,11 +39,8 @@ import {
 import Link from "next/link";
 import { RedirectType, notFound, redirect } from "next/navigation";
 import { Link as LinkIcon } from "lucide-react";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { CarouselPeople } from "@/components/carousel-people";
+import { MovieCollection } from "@/components/movie-collection";
 
 export default async function MovieDetail({
   params,
@@ -52,6 +59,7 @@ export default async function MovieDetail({
     } & { external_ids: WithExternalIds }
   >(parseInt(movie_id), {
     append_to_response: "videos,credits,keywords,external_ids",
+    language: 'zh-HK'
   });
 
   const crews = toPairs(
@@ -69,12 +77,14 @@ export default async function MovieDetail({
       profile_path: head(crew)?.profile_path,
     };
   });
-  if (kebabCase(movie.title) !== kebabCase(args.join("-"))) {
-    redirect(
-      `/movies/${movie_id}-${kebabCase(movie.title)}`,
-      RedirectType.replace
-    );
-  }
+  console.log("===>", args, kebabCase(movie.original_title), kebabCase(args.join("-")));
+
+  // if (kebabCase(movie.original_title) !== kebabCase(args.join("-"))) {
+  //   redirect(
+  //     `/movies/${movie_id}-${kebabCase(movie.original_title)}`,
+  //     RedirectType.replace
+  //   );
+  // }
 
   const overview = [
     {
@@ -108,7 +118,24 @@ export default async function MovieDetail({
       ),
     },
   ];
-  console.log("🚀 ~ movie:", movie);
+  const a = groupBy(movie.credits.crew, "original_name");
+  const output = toPairs(a).map(([name, crews]) => {
+    const b = reduce(
+      crews,
+      function (result, value) {
+        result[value.original_name] = {
+          ...value,
+          job: result[value.original_name]
+            ? result[value.original_name].job + ", " + value.job
+            : value.job,
+        };
+        return result;
+      },
+      {} as Record<string, Crew>
+    );
+
+    return values(b);
+  });
 
   return (
     <MediaDetailView.Root className="relative h-full bg-accent">
@@ -119,12 +146,12 @@ export default async function MovieDetail({
         <MediaDetailView.Hero className="pt-[20vh] mt-0">
           <MediaDetailView.Poster className="hidden md:block">
             <MediaPoster
-              className="rounded-lg border"
+              className="rounded-lg border border-input"
               alt={movie.original_title}
               image={movie.poster_path}
             />
           </MediaDetailView.Poster>
-          <MediaDetailView.Intro>
+          <MediaDetailView.Intro className="text-accent-foreground">
             <h1 className="text-3xl">{movie.title}</h1>
             <div className="flex flex-col sm:space-y-0 sm:flex-row sm:space-x-4">
               <div className="flex space-x-1 ">
@@ -133,23 +160,19 @@ export default async function MovieDetail({
                   variant="yellow"
                   size={16}
                 />
-                <span className="text-slate-100">
-                  {movie.vote_average.toFixed(1)}
-                </span>
+                <span className="">{movie.vote_average.toFixed(1)}</span>
               </div>
               <div className="flex space-x-1 items-center">
                 <Eye className="text-yellow-500" size={16} />
-                <span className="text-slate-100">{movie.vote_count}</span>
+                <span className="">{movie.vote_count}</span>
               </div>
               <div className="flex space-x-1 items-center">
                 <CalendarDays className="text-yellow-500" size={16} />
-                <span className="text-slate-100">{movie.release_date}</span>
+                <span className="">{movie.release_date}</span>
               </div>
               <div className="flex space-x-1 items-center">
                 <Clock className="text-yellow-500" size={16} />
-                <span className="text-slate-100">
-                  {formatTime(movie.runtime)}
-                </span>
+                <span className="">{formatTime(movie.runtime)}</span>
               </div>
             </div>
             <div>
@@ -179,71 +202,35 @@ export default async function MovieDetail({
         </MediaDetailView.Hero>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-3 space-y-4">
-            {/* <CarouselCast items={movie.credits.cast} title="Top Billed Cast" /> */}
-            <Tabs className="w-full" defaultValue="cast">
-              <div className="max-w-screen scrollbar-hidden overflow-x-scroll ">
-                <TabsList>
-                  <TabsTrigger value="cast">Cast</TabsTrigger>
-                  <TabsTrigger value="crew">Crew</TabsTrigger>
-                  <TabsTrigger value="watch">Watch</TabsTrigger>
-                  <TabsTrigger value="reviews">Reviews</TabsTrigger>
-                  <TabsTrigger value="images">Images</TabsTrigger>
-                  <TabsTrigger value="videos">Videos</TabsTrigger>
-                  <TabsTrigger value="recommendations">
-                    Recommendations
-                  </TabsTrigger>
-                  <TabsTrigger value="similar">Similar</TabsTrigger>
-                </TabsList>
-              </div>
-              <TabsContent value="cast" className="py-4">
-                <div className="grid grid-cols-4 gap-10">
-                  {movie.credits.cast.map((cast) => (
-                    <MediaCastCard {...cast} />
-                  ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="crew" className="py-4">
-                <div className="space-y-4">
-                  {toPairs(groupBy(movie.credits.crew, "department")).map(
-                    ([name, crews]) => {
-                      return (
-                        <div className="space-y-2">
-                          <h3 className="text-lg">{name}</h3>
-                          <div className="grid grid-cols-4 gap-10">
-                            {toPairs(
-                              reduce(
-                                crews,
-                                function (result, value) {
-                                  result[value.original_name] = {
-                                    ...value,
-                                    job: result[value.original_name]
-                                      ? result[value.original_name].job +
-                                        ", " +
-                                        value.job
-                                      : value.job,
-                                  };
-                                  return result;
-                                },
-                                {} as Record<string, Crew>
-                              )
-                            ).map(([name, crew]) => {
-                              return (
-                                <MediaCastCard
-                                  id={crew.id}
-                                  profile_path={crew.profile_path}
-                                  name={crew.name}
-                                  character={crew.job}
-                                />
-                              );
-                            })}
-                          </div>
-                        </div>
-                      );
-                    }
-                  )}
-                </div>
-              </TabsContent>
-            </Tabs>
+            <CarouselPeople
+              title="Cast"
+              items={movie.credits.cast.map((cast) => {
+                return {
+                  id: cast.id,
+                  name: cast.name,
+                  profile_path: cast.profile_path,
+                  character: cast.character,
+                };
+              })}
+            />
+            <CarouselPeople
+              title="Crew"
+              items={flatten(output).map((cast) => {
+                return {
+                  id: cast.id,
+                  name: cast.name,
+                  profile_path: cast.profile_path,
+                  character: cast.job,
+                };
+              })}
+            />
+
+            {movie.belongs_to_collection && (
+              <>
+                <Separator className="bg-accent-foreground" />
+                <MovieCollection id={movie.belongs_to_collection.id} />
+              </>
+            )}
           </div>
           <div>
             <div className="mb-4">

@@ -97,9 +97,11 @@ export default async function ListPage({
       ? await Service.discover.movie({
           ...defaultParams,
           ...searchParams,
+          ...{languages: 'zh-hk'}
         })
       : await Service.movie.list(type, {
           ...defaultParams,
+          ...{language: 'zh-hk'}
         });
 
   const genres = await Service.genre.list("movie");
