@@ -11,27 +11,28 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { MediaCastCard } from "./media-cast-card";
+import { cn } from "@/lib/utils";
+import { VideoCard } from "./images/video";
+import { Video } from "@/services/models/videos";
+import { DialogVideo } from "./dialog-video";
 import { useCount } from "@/hooks/useCount";
 
-interface CarouselPeopleProps {
+interface CarouselVideosProps {
   title?: string;
-  items: {
-    id: number;
-    profile_path: string;
-    name: string;
-    character: string;
-  }[];
+  items: Video[];
+  type: "poster" | "backdrop";
 }
 
-export const CarouselPeople: React.FC<CarouselPeopleProps> = ({
+export const CarouselVideos: React.FC<CarouselVideosProps> = ({
   title,
   items,
+  type = "poster",
 }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
-  const { current, count, setCount, setCurrent } = useCount();
+
+  const { count, current, setCount, setCurrent } = useCount();
 
   function nextSlide() {
     api?.scrollNext();
@@ -43,13 +44,15 @@ export const CarouselPeople: React.FC<CarouselPeopleProps> = ({
 
   useEffect(() => {
     if (!api) return;
+
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
+
     api.on("select", () => {
-      setCanScrollNext(api?.canScrollNext());
-      setCanScrollPrev(api?.canScrollPrev());
       setCount(api.scrollSnapList().length);
       setCurrent(api.selectedScrollSnap() + 1);
+      setCanScrollNext(api?.canScrollNext());
+      setCanScrollPrev(api?.canScrollPrev());
     });
 
     api.on("resize", () => {
@@ -94,13 +97,13 @@ export const CarouselPeople: React.FC<CarouselPeopleProps> = ({
       >
         <CarouselContent>
           {items.map((item, index) => (
-            <CarouselItem key={`item-${index}`} className="carousel-item">
-              <MediaCastCard
-                id={item.id}
-                profile_path={item.profile_path}
-                name={item.name}
-                character={item.character}
-              />
+            <CarouselItem
+              key={`item-${index}`}
+              className={cn("carousel-item-backdrop")}
+            >
+              <DialogVideo video={item}>
+                <VideoCard name={item.name} ytKey={item.key} />
+              </DialogVideo>
             </CarouselItem>
           ))}
         </CarouselContent>

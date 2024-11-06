@@ -88,7 +88,6 @@ const backdrop = (path: string, size: BackdropSize = "original") => {
  * @returns The URL of the profile image.
  */
 const profile = (path: string, size: ProfileSize = "original") => {
-  console.log("🚀 ~ profile ~ path:", path);
   return url(path, imageSizes.profile[size]);
 };
 

@@ -41,6 +41,8 @@ import { RedirectType, notFound, redirect } from "next/navigation";
 import { Link as LinkIcon } from "lucide-react";
 import { CarouselPeople } from "@/components/carousel-people";
 import { MovieCollection } from "@/components/movie-collection";
+import { CarouselImages } from "@/components/carousel-images";
+import { CarouselVideos } from "@/components/carousel-videos";
 
 export default async function MovieDetail({
   params,
@@ -59,8 +61,10 @@ export default async function MovieDetail({
     } & { external_ids: WithExternalIds }
   >(parseInt(movie_id), {
     append_to_response: "videos,credits,keywords,external_ids",
-    language: 'zh-HK'
   });
+
+  const images = await Service.movie.images(movie.id);
+  const videos = await Service.movie.videos(movie.id);
 
   const crews = toPairs(
     groupBy(
@@ -77,7 +81,12 @@ export default async function MovieDetail({
       profile_path: head(crew)?.profile_path,
     };
   });
-  console.log("===>", args, kebabCase(movie.original_title), kebabCase(args.join("-")));
+  console.log(
+    "===>",
+    args,
+    kebabCase(movie.original_title),
+    kebabCase(args.join("-"))
+  );
 
   // if (kebabCase(movie.original_title) !== kebabCase(args.join("-"))) {
   //   redirect(
@@ -142,7 +151,7 @@ export default async function MovieDetail({
       <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden lg:rounded-l-lg lg:!rounded-b-none z-0">
         <MediaBackdrop alt={movie.original_title} image={movie.backdrop_path} />
       </MediaDetailView.Backdrop>
-      <MediaDetailView.Content className="space-y-5">
+      <MediaDetailView.Content className="space-y-5 mb-10 relative z-10">
         <MediaDetailView.Hero className="pt-[20vh] mt-0">
           <MediaDetailView.Poster className="hidden md:block">
             <MediaPoster
@@ -223,6 +232,22 @@ export default async function MovieDetail({
                   character: cast.job,
                 };
               })}
+            />
+            <CarouselImages
+              title="Posters"
+              items={[...images.posters]}
+              type="poster"
+            />
+
+            <CarouselImages
+              title="Backdrops"
+              items={[...images.backdrops]}
+              type="backdrop"
+            />
+            <CarouselVideos
+              title="Videos"
+              items={[...videos.results]}
+              type="backdrop"
             />
 
             {movie.belongs_to_collection && (

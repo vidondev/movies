@@ -11,26 +11,26 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { MediaCastCard } from "./media-cast-card";
+import { Image } from "@/services/models/image";
+import { MediaPoster } from "./images/poster";
+import { cn } from "@/lib/utils";
 import { useCount } from "@/hooks/useCount";
 
-interface CarouselPeopleProps {
+interface CarouselImagesProps {
   title?: string;
-  items: {
-    id: number;
-    profile_path: string;
-    name: string;
-    character: string;
-  }[];
+  items: Image[];
+  type: "poster" | "backdrop";
 }
 
-export const CarouselPeople: React.FC<CarouselPeopleProps> = ({
+export const CarouselImages: React.FC<CarouselImagesProps> = ({
   title,
   items,
+  type = "poster",
 }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
+
   const { current, count, setCount, setCurrent } = useCount();
 
   function nextSlide() {
@@ -43,12 +43,13 @@ export const CarouselPeople: React.FC<CarouselPeopleProps> = ({
 
   useEffect(() => {
     if (!api) return;
+
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
+
     api.on("select", () => {
       setCanScrollNext(api?.canScrollNext());
       setCanScrollPrev(api?.canScrollPrev());
-      setCount(api.scrollSnapList().length);
       setCurrent(api.selectedScrollSnap() + 1);
     });
 
@@ -63,7 +64,9 @@ export const CarouselPeople: React.FC<CarouselPeopleProps> = ({
       <div className="flex items-center justify-between">
         <h2 className="text-2xl tracking-tight">{title}</h2>
         <div className="flex space-x-2 items-center">
-          <span>{`${current}/${count}`}</span>
+          <span>
+            {current} / {count}
+          </span>
           <Button
             size="icon"
             variant="outline"
@@ -94,13 +97,25 @@ export const CarouselPeople: React.FC<CarouselPeopleProps> = ({
       >
         <CarouselContent>
           {items.map((item, index) => (
-            <CarouselItem key={`item-${index}`} className="carousel-item">
-              <MediaCastCard
-                id={item.id}
-                profile_path={item.profile_path}
-                name={item.name}
-                character={item.character}
-              />
+            <CarouselItem
+              key={`item-${index}`}
+              className={cn(
+                type === "poster" ? "carousel-item" : "carousel-item-backdrop"
+              )}
+            >
+              <div
+                className={cn(
+                  "relative",
+                  type === "poster" ? "aspect-poster" : "aspect-video"
+                )}
+              >
+                <MediaPoster
+                  image={item.file_path}
+                  alt={""}
+                  className="rounded-lg"
+                  type={type}
+                />
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>

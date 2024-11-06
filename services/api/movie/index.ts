@@ -12,6 +12,7 @@ import {
 import { Credits } from "@/services/models/credits";
 import { GetImagesResponse } from "@/services/models/image";
 import { Keyword } from "@/services/models/keyword";
+import { GetVideosResponse } from "@/services/models/videos";
 
 const PREFIX = `/movie`;
 
@@ -74,6 +75,19 @@ const images = (movie_id: number, params?: MovieImagesRequestParams) =>
   });
 
 /**
+ * Fetches videos for a specific movie.
+ *
+ * @param {MovieVideosRequestParams} params - The parameters for the movie videos request, including the movie ID and languages for the videos.
+ * @returns {Promise<GetImagesResponse>} A promise that resolves to the videos of the movie.
+ * @see https://developer.themoviedb.org/reference/movie-videos
+ */
+const videos = (movie_id: number, params?: MovieListRequestParams) =>
+  api.fetcher<GetVideosResponse>({
+    endpoint: `${PREFIX}/${movie_id}/videos`,
+    params: params,
+  });
+
+/**
  * Fetches keywords for a specific movie.
  *
  * @param {number} movie_id - The parameters for the movie keywords request.
@@ -106,6 +120,7 @@ export const movie = {
   detail,
   credits,
   images,
+  videos,
   keywords,
   recommendations,
 };

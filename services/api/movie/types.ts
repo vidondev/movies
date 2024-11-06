@@ -25,6 +25,10 @@ export type MovieImagesRequestParams = {
   language?: string;
 };
 
+export type MovieVideosRequestParams = {
+  language?: string;
+};
+
 export type MovieRecommendationsRequestParams = {
   language?: string;
   page?: string;

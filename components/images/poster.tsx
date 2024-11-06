@@ -11,6 +11,8 @@ interface MediaPosterProps extends ComponentProps<"div"> {
   size?: PosterSize;
   alt: string;
   priority?: boolean;
+
+  type?: "poster" | "backdrop";
 }
 
 export const MediaPoster: React.FC<MediaPosterProps> = ({
@@ -19,9 +21,14 @@ export const MediaPoster: React.FC<MediaPosterProps> = ({
   alt,
   className,
   priority,
+  type,
   ...props
 }) => {
-  const src = image ? tmdbImage.poster(image, size) : null;
+  const src = image
+    ? type === "poster"
+      ? tmdbImage.poster(image, size)
+      : tmdbImage.backdrop(image)
+    : null;
 
   if (!src) {
     return (
