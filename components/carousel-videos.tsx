@@ -16,6 +16,8 @@ import { VideoCard } from "./images/video";
 import { Video } from "@/services/models/videos";
 import { DialogVideo } from "./dialog-video";
 import { useCount } from "@/hooks/useCount";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { yt } from "@/lib/yt";
 
 interface CarouselVideosProps {
   title?: string;

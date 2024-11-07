@@ -1,14 +1,17 @@
 import { MovieHero } from "@/components/movie-hero";
 import { TrendCarousel } from "@/components/trend-carousel";
 import { Service } from "@/services/api";
+import { cookies } from "next/headers";
 
 export default async function Home() {
+  const region = cookies().get("region")?.value ?? "US";
+
   const movie = await Service.trending.movie(
     {
       time_window: "day",
     },
     {
-      language: "zh-HK",
+      language: region,
     }
   );
   const tv = await Service.trending.tv(
@@ -16,7 +19,7 @@ export default async function Home() {
       time_window: "day",
     },
     {
-      language: "zh-hk",
+      language: region,
     }
   );
 

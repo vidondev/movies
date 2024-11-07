@@ -19,9 +19,9 @@ export const DialogVideo: React.FC<DialogVideoProps> = ({
     <Dialog modal>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="max-w-screen-lg">
+      <DialogContent className="max-w-screen-lg p-0 border-none">
         <iframe
-          className="aspect-square size-full rounded-md sm:aspect-video"
+          className="size-full rounded-none aspect-video"
           src={yt.video(video.key, true)}
           allow="autoplay; encrypted-media"
           allowFullScreen={true}

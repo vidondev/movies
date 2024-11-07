@@ -22,9 +22,10 @@ const details = () =>
  * Fetches the list of languages from the TMDB API.
  * @returns A promise that resolves to the language response.
  */
-const languages = () =>
+const languages = (params?: any) =>
   api.fetcher<Language[]>({
     endpoint: `${PREFIX}/languages`,
+    params: params,
   });
 
 /**

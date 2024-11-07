@@ -4,6 +4,7 @@ import "./globals.scss";
 import { Sidebar } from "@/components/sidebar";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import Header from "@/components/site-header";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,16 +22,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={inter.className}>
-        <Header />
-        <div className="app-container relative">
-          <div className="pl-0 lg:pl-4 hidden lg:block">
-            <Sidebar />
+        <ThemeProvider attribute="class" defaultTheme="dark">
+          <Header />
+          <div className="app-container relative">
+            <div className="pl-0 lg:pl-4 hidden lg:block">
+              <Sidebar />
+            </div>
+            <main className="lg:ml-10">{children}</main>
           </div>
-          <main className="lg:ml-10">{children}</main>
-        </div>
-        <TailwindIndicator />
+          <TailwindIndicator />
+        </ThemeProvider>
       </body>
     </html>
   );

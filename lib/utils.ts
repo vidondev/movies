@@ -55,8 +55,14 @@ export function sortByReleaseDate(
   order: "asc" | "desc" = "asc"
 ) {
   return list.sort((a, b) => {
-    const dateA = new Date(a.release_date).getTime()
-    const dateB = new Date(b.release_date).getTime()
-    return order === "asc" ? dateA - dateB : dateB - dateA
-  })
+    const dateA = new Date(a.release_date).getTime();
+    const dateB = new Date(b.release_date).getTime();
+    return order === "asc" ? dateA - dateB : dateB - dateA;
+  });
+}
+
+export function cleanUpTitle(title: string) {
+  const regex = /[^a-zA-Z0-9 ]+/gm;
+
+  return title.replace(regex, "").trim();
 }

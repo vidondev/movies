@@ -1,14 +1,12 @@
 import { MediaPoster } from "@/components/images/poster";
 import { MediaBackdrop } from "@/components/media-backdrop";
-import { MediaCastCard } from "@/components/media-cast-card";
 import { MediaDetailView } from "@/components/media-detail-view";
 import { MediaTrailerDialog } from "@/components/media-trailer-dialog";
 import { Ratings } from "@/components/ratings";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "@/lib/format";
-import { formatTime, formatValue, joiner } from "@/lib/utils";
+import { cleanUpTitle, formatTime, formatValue, joiner } from "@/lib/utils";
 import { Service } from "@/services/api";
 import {
   WithCredits,
@@ -18,12 +16,10 @@ import {
 } from "@/services/api/types";
 import { Crew } from "@/services/models/credits";
 import {
-  flatMap,
   flatten,
   groupBy,
   head,
   kebabCase,
-  mapValues,
   reduce,
   toPairs,
   values,
@@ -43,6 +39,7 @@ import { CarouselPeople } from "@/components/carousel-people";
 import { MovieCollection } from "@/components/movie-collection";
 import { CarouselImages } from "@/components/carousel-images";
 import { CarouselVideos } from "@/components/carousel-videos";
+import { cookies } from "next/headers";
 
 export default async function MovieDetail({
   params,
@@ -52,6 +49,7 @@ export default async function MovieDetail({
   const { id } = params;
   const [movie_id, ...args] = id.split("-");
   if (isNaN(parseInt(movie_id))) return notFound();
+  const region = cookies().get("region")?.value ?? "US";
 
   const movie = await Service.movie.detail<
     WithVideos & {
@@ -61,10 +59,15 @@ export default async function MovieDetail({
     } & { external_ids: WithExternalIds }
   >(parseInt(movie_id), {
     append_to_response: "videos,credits,keywords,external_ids",
+    language: region,
   });
 
-  const images = await Service.movie.images(movie.id);
-  const videos = await Service.movie.videos(movie.id);
+  const images = await Service.movie.images(movie.id, {
+    language: region,
+  });
+  const videos = await Service.movie.videos(movie.id, {
+    language: region,
+  });
 
   const crews = toPairs(
     groupBy(
@@ -81,19 +84,15 @@ export default async function MovieDetail({
       profile_path: head(crew)?.profile_path,
     };
   });
-  console.log(
-    "===>",
-    args,
-    kebabCase(movie.original_title),
-    kebabCase(args.join("-"))
-  );
 
-  // if (kebabCase(movie.original_title) !== kebabCase(args.join("-"))) {
-  //   redirect(
-  //     `/movies/${movie_id}-${kebabCase(movie.original_title)}`,
-  //     RedirectType.replace
-  //   );
-  // }
+  if (
+    kebabCase(cleanUpTitle(movie.original_title)) !== kebabCase(args.join("-"))
+  ) {
+    redirect(
+      `/movies/${movie_id}-${kebabCase(cleanUpTitle(movie.original_title))}`,
+      RedirectType.replace
+    );
+  }
 
   const overview = [
     {
@@ -233,22 +232,28 @@ export default async function MovieDetail({
                 };
               })}
             />
-            <CarouselImages
-              title="Posters"
-              items={[...images.posters]}
-              type="poster"
-            />
+            {images.posters.length > 0 && (
+              <CarouselImages
+                title="Posters"
+                items={[...images.posters]}
+                type="poster"
+              />
+            )}
 
-            <CarouselImages
-              title="Backdrops"
-              items={[...images.backdrops]}
-              type="backdrop"
-            />
-            <CarouselVideos
-              title="Videos"
-              items={[...videos.results]}
-              type="backdrop"
-            />
+            {images.backdrops.length > 0 && (
+              <CarouselImages
+                title="Backdrops"
+                items={[...images.backdrops]}
+                type="backdrop"
+              />
+            )}
+            {videos.results.length > 0 && (
+              <CarouselVideos
+                title="Videos"
+                items={[...videos.results]}
+                type="backdrop"
+              />
+            )}
 
             {movie.belongs_to_collection && (
               <>

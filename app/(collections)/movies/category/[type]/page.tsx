@@ -17,6 +17,7 @@ import { Service } from "@/services/api";
 import { DiscoverRequestParams } from "@/services/api/discover/types";
 import { MovieType } from "@/services/api/movie/types";
 import { get, has, hasIn, intersection, keys } from "lodash";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 interface ListPageProps {
@@ -92,16 +93,18 @@ export default async function ListPage({
       notFound();
   }
 
+  const region = cookies().get("region")?.value ?? "US";
+
   const { results, total_pages, page } =
     intersection(keys(searchParams), availableParams).length > 0
       ? await Service.discover.movie({
           ...defaultParams,
           ...searchParams,
-          ...{languages: 'zh-hk'}
+          ...{ languages: region },
         })
       : await Service.movie.list(type, {
           ...defaultParams,
-          ...{language: 'zh-hk'}
+          ...{ language: region },
         });
 
   const genres = await Service.genre.list("movie");
