@@ -63,31 +63,33 @@ export const CarouselImages: React.FC<CarouselImagesProps> = ({
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl tracking-tight">{title}</h2>
-        <div className="flex space-x-2 items-center">
-          <span>
-            {current} / {count}
-          </span>
-          <Button
-            size="icon"
-            variant="outline"
-            className="rounded-full"
-            onClick={previousSlide}
-            disabled={!canScrollPrev}
-          >
-            <ChevronLeft />
-            <span className="sr-only">Previous</span>
-          </Button>
-          <Button
-            size="icon"
-            variant="outline"
-            className="rounded-full"
-            onClick={nextSlide}
-            disabled={!canScrollNext}
-          >
-            <ChevronRight />
-            <span className="sr-only">Next</span>
-          </Button>
-        </div>
+        {count > 1 && (
+          <div className="flex space-x-2 items-center">
+            <span>
+              {current} / {count}
+            </span>
+            <Button
+              size="icon"
+              variant="outline"
+              className="rounded-full"
+              onClick={previousSlide}
+              disabled={!canScrollPrev}
+            >
+              <ChevronLeft />
+              <span className="sr-only">Previous</span>
+            </Button>
+            <Button
+              size="icon"
+              variant="outline"
+              className="rounded-full"
+              onClick={nextSlide}
+              disabled={!canScrollNext}
+            >
+              <ChevronRight />
+              <span className="sr-only">Next</span>
+            </Button>
+          </div>
+        )}
       </div>
       <Carousel
         setApi={setApi}

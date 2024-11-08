@@ -5,9 +5,12 @@ import { SelectTheme } from "./select-theme";
 import { Label } from "./ui/label";
 import { SelectLanguage } from "./select-language";
 import { cookies } from "next/headers";
+import { Service } from "@/services/api";
 
-export default function SiteSettings() {
+export default async function SiteSettings() {
   const region = cookies().get("region")?.value ?? "US";
+
+  const languages = await Service.configuration.languages();
 
   return (
     <Popover>
@@ -21,7 +24,7 @@ export default function SiteSettings() {
         <h5>Settings</h5>
         <div className="space-y-1">
           <Label className="text-xs text-muted-foreground">Languages</Label>
-          <SelectLanguage value={region} />
+          <SelectLanguage value={region} languages={languages} />
         </div>
         <div className="space-y-1">
           <Label className="text-xs text-muted-foreground">Theme</Label>
