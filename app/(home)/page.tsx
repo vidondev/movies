@@ -25,7 +25,7 @@ export default async function Home() {
 
   return (
     <div className="container space-y-4">
-      <MovieHero movies={movie.results} region={region} />
+      <MovieHero movies={movie.results} />
       <div className="space-y-4 py-4">
         <TrendCarousel items={movie.results} title="Trending Movies" />
         <TrendCarousel items={tv.results} title="Trending TV" />

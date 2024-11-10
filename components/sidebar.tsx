@@ -53,28 +53,28 @@ export function Sidebar({ className }: SidebarProps) {
       ],
     },
     {
-      title: "TV Shows",
+      title: "TV shows",
       href: "/tv",
       Icon: Tv,
       items: [
         {
           title: "Popular",
-          href: "/tv/category/popular",
+          href: "/tv/popular",
           Icon: Heart,
         },
         {
-          title: "Airing Today",
-          href: "/tv/category/airing-today",
+          title: "Now Playing",
+          href: "/tv/now-playing",
           Icon: Play,
         },
         {
-          title: "On TV",
-          href: "/tv/category/om-the-air",
+          title: "Upcoming",
+          href: "/tv/upcoming",
           Icon: CalendarDays,
         },
         {
           title: "Top Rated",
-          href: "/tv/category/top-rated",
+          href: "/tv/top-rated",
           Icon: Star,
         },
       ],

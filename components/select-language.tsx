@@ -1,6 +1,10 @@
 "use client";
 
 import * as React from "react";
+
+import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
+import { Service } from "@/services/api";
+import { Language } from "@/services/models/configuration";
 import { setRegion } from "@/app/actions";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
@@ -12,11 +16,10 @@ import {
   CommandItem,
   CommandList,
 } from "./ui/command";
-import { getLanguageName } from "@/lib/utils";
 
 interface SelectLanguageProps {
   value?: string;
-  languages: string[];
+  languages: Language[];
 }
 
 export const SelectLanguage: React.FC<SelectLanguageProps> = ({
@@ -34,10 +37,8 @@ export const SelectLanguage: React.FC<SelectLanguageProps> = ({
           className="justify-start w-full"
         >
           {value
-            ? getLanguageName(
-                languages.find((language) => language === value),
-                value
-              )
+            ? languages.find((language) => language.iso_639_1 === value)
+                ?.english_name
             : "Select Language"}
         </Button>
       </PopoverTrigger>
@@ -49,16 +50,14 @@ export const SelectLanguage: React.FC<SelectLanguageProps> = ({
             <CommandGroup>
               {languages.map((language, index) => (
                 <CommandItem
-                  value={getLanguageName(value, language)}
+                  value={language.english_name}
                   key={`item-${index}`}
                   onSelect={() => {
-                    setRegion(language);
+                    setRegion(language.iso_639_1);
                     setOpen(false);
                   }}
                 >
-                  <div className="flex items-center gap-2">
-                    {getLanguageName(value, language)}
-                  </div>
+                  {language.english_name}
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -6,7 +6,7 @@ import { Ratings } from "@/components/ratings";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { format } from "@/lib/format";
-import { cleanUpTitle, cn, formatTime, formatValue, joiner } from "@/lib/utils";
+import { cleanUpTitle, formatTime, formatValue, joiner } from "@/lib/utils";
 import { Service } from "@/services/api";
 import {
   WithCredits,
@@ -94,7 +94,7 @@ export default async function MovieDetail({
     );
   }
 
-  const overviews = [
+  const overview = [
     {
       title: "Status",
       value: formatValue(movie.status),
@@ -126,10 +126,9 @@ export default async function MovieDetail({
       ),
     },
   ];
-  const groupByName = groupBy(movie.credits.crew, "original_name");
-  const pairCrews = toPairs(groupByName).map(([name, crews]) => {
-
-    return values(reduce(
+  const a = groupBy(movie.credits.crew, "original_name");
+  const output = toPairs(a).map(([name, crews]) => {
+    const b = reduce(
       crews,
       function (result, value) {
         result[value.original_name] = {
@@ -141,7 +140,9 @@ export default async function MovieDetail({
         return result;
       },
       {} as Record<string, Crew>
-    ));
+    );
+
+    return values(b);
   });
 
   return (
@@ -208,7 +209,7 @@ export default async function MovieDetail({
           </MediaDetailView.Intro>
         </MediaDetailView.Hero>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-3 space-y-4">
+          <div className="col-span-3 space-y-4">
             <CarouselPeople
               title="Cast"
               items={movie.credits.cast.map((cast) => {
@@ -222,7 +223,7 @@ export default async function MovieDetail({
             />
             <CarouselPeople
               title="Crew"
-              items={flatten(pairCrews).map((cast) => {
+              items={flatten(output).map((cast) => {
                 return {
                   id: cast.id,
                   name: cast.name,
@@ -309,9 +310,9 @@ export default async function MovieDetail({
                 </li>
               </ul>
             </div>
-            <ol className="space-y-2 grid grid-cols-2 md:grid-cols-1">
-              {overviews.map((overview, index) => (
-                <li key={`item-${index}`} className={cn(index === overviews.length -1 ? 'col-span-2 md:col-span-1' : '')}>
+            <ol className="space-y-2">
+              {overview.map((overview, index) => (
+                <li key={`item-${index}`}>
                   <p>
                     <strong>{overview.title}</strong>
                   </p>

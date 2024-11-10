@@ -10,7 +10,7 @@ import { Service } from "@/services/api";
 export default async function SiteSettings() {
   const region = cookies().get("region")?.value ?? "US";
 
-  const languages = await Service.configuration.primary_translations();
+  const languages = await Service.configuration.languages();
 
   return (
     <Popover>

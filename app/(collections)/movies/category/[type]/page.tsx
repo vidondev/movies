@@ -2,11 +2,21 @@ import { ListPagination } from "@/components/list-pagination";
 import { MovieFilters } from "@/components/movie-filters";
 import { MovieList } from "@/components/movie-list";
 import { MovieSort } from "@/components/movie-sort";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { availableParams } from "@/config/site";
+import { filterParams } from "@/lib/utils";
 import { Service } from "@/services/api";
 import { DiscoverRequestParams } from "@/services/api/discover/types";
 import { MovieType } from "@/services/api/movie/types";
-import { intersection, keys } from "lodash";
+import { get, has, hasIn, intersection, keys } from "lodash";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
@@ -90,16 +100,14 @@ export default async function ListPage({
       ? await Service.discover.movie({
           ...defaultParams,
           ...searchParams,
-          ...{ language: region },
+          ...{ languages: region },
         })
       : await Service.movie.list(type, {
           ...defaultParams,
           ...{ language: region },
         });
 
-  const genres = await Service.genre.list("movie", {
-    language: region
-  });
+  const genres = await Service.genre.list("movie");
 
   return (
     <div className="container space-y-4">
