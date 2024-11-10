@@ -6,9 +6,11 @@ import { availableParams } from "@/config/site";
 import { Service } from "@/services/api";
 import { DiscoverRequestParams } from "@/services/api/discover/types";
 import { MovieType } from "@/services/api/movie/types";
+import { TvListType } from "@/services/api/tv/types";
 import { intersection, keys } from "lodash";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+
 
 interface ListPageProps {
   searchParams?: DiscoverRequestParams;
@@ -37,7 +39,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${title} Movies`,
+    title: `${title} TV`,
   };
 }
 
@@ -49,18 +51,18 @@ export default async function ListPage({
   let defaultParams = {};
   switch (params?.type) {
     case "popular":
-      type = MovieType.POPULAR;
+      type = TvListType.POPULAR;
       break;
-    case "now-playing":
-      type = MovieType.NOW_PLAYING;
+    case "on-the-air":
+      type = TvListType.ON_THE_AIR;
       defaultParams = {
         "release_date.gte": "2024-09-04",
         "release_date.lte": "2024-10-16",
         with_release_type: "3",
       };
       break;
-    case "upcoming":
-      type = MovieType.UPCOMING;
+    case "airing-today":
+      type = TvListType.AIRING_TODAY;
       defaultParams = {
         "vote_average.gte": "0",
         "vote_average.lte": 10,
@@ -72,7 +74,7 @@ export default async function ListPage({
       };
       break;
     case "top-rated":
-      type = MovieType.TOP_RATED;
+      type = TvListType.TOP_RATED;
       defaultParams = {
         "release_date.lte": "2025-04-10",
         "vote_count.gte": "300",
@@ -92,23 +94,23 @@ export default async function ListPage({
           ...searchParams,
           ...{ language: region },
         })
-      : await Service.movie.list(type, {
-          ...defaultParams,
-          ...{ language: region },
+      : await Service.tv.list( {
+          ...{
+            list: type,
+            language: region
+          }
         });
 
-  const genres = await Service.genre.list("movie", {
+  const genres = await Service.genre.list("tv", {
     language: region
   });
-
-  return (
-    <div className="container space-y-4">
-      <div className="flex justify-end space-x-2">
-        <MovieFilters genres={genres.genres} />
-        <MovieSort type="movie" />
-      </div>
-      <MovieList movies={results} />
-      <ListPagination totalPages={total_pages} currentPage={page} />
-    </div>
-  );
+console.log("==>",results)
+  return     <div className="container space-y-4">
+  <div className="flex justify-end space-x-2">
+    <MovieFilters genres={genres.genres} />
+    <MovieSort type="movie" />
+  </div>
+  {/* <MovieList movies={results} /> */}
+  <ListPagination totalPages={total_pages} currentPage={page} />
+</div>
 }

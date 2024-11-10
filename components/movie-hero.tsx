@@ -11,9 +11,10 @@ import { MediaHero } from "./media-hero";
 interface MovieHeroProps {
   movies: Movie[];
   count?: number;
+  region?:string
 }
 
-export const MovieHero: React.FC<MovieHeroProps> = ({ movies, count = 1 }) => {
+export const MovieHero: React.FC<MovieHeroProps> = ({ movies, count = 1, region }) => {
   const items = getRandomItems(movies, count);
   const [data, setData] = useState<(MovieDetails & WithVideos)[]>([]);
 
@@ -22,6 +23,7 @@ export const MovieHero: React.FC<MovieHeroProps> = ({ movies, count = 1 }) => {
     if (item) {
       const heroMovie = await Service.movie.detail<WithVideos>(item?.id, {
         append_to_response: "videos",
+        language: region
       });
       setData([heroMovie]);
     }
