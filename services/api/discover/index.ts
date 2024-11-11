@@ -2,6 +2,7 @@ import { Movie } from "@/services/models/movie";
 import { api } from "../api";
 import { ListResponse } from "../types";
 import { DiscoverMovieRequestParams, DiscoverTvRequestParams } from "./types";
+import { TvShow } from "@/services/models/tv";
 
 const PREFIX = `/discover`;
 
@@ -24,7 +25,7 @@ const movie = (params?: DiscoverMovieRequestParams) =>
  * @returns A Promise that resolves to a ListResponse containing the discovered movies.
  */
 const tv = (params?: DiscoverTvRequestParams) =>
-  api.fetcher<ListResponse<Movie>>({
+  api.fetcher<ListResponse<TvShow>>({
     endpoint: `${PREFIX}/tv`,
     params: params as Record<string, string>,
   });

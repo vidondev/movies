@@ -14,6 +14,8 @@ export const availableParams = [
   "vote_count.lte",
   "with_runtime.gte",
   "with_runtime.lte",
+  "air_date.gte",
+  "air_date.lte",
   "sort_by",
   "page",
 ];

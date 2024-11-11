@@ -2,6 +2,7 @@ import { ListPagination } from "@/components/list-pagination";
 import { MovieFilters } from "@/components/movie-filters";
 import { MovieList } from "@/components/movie-list";
 import { MovieSort } from "@/components/movie-sort";
+import { TvList } from "@/components/tv-list";
 import { availableParams } from "@/config/site";
 import { Service } from "@/services/api";
 import { DiscoverRequestParams } from "@/services/api/discover/types";
@@ -10,7 +11,6 @@ import { TvListType } from "@/services/api/tv/types";
 import { intersection, keys } from "lodash";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-
 
 interface ListPageProps {
   searchParams?: DiscoverRequestParams;
@@ -52,6 +52,12 @@ export default async function ListPage({
   switch (params?.type) {
     case "popular":
       type = TvListType.POPULAR;
+      defaultParams = {
+        certification_country: "US",
+        region: "US|XX",
+        show_me: "everything",
+        with_watch_monetization_types: "flatrate|free|ads|rent|buy",
+      };
       break;
     case "on-the-air":
       type = TvListType.ON_THE_AIR;
@@ -86,31 +92,33 @@ export default async function ListPage({
   }
 
   const region = cookies().get("region")?.value ?? "US";
+  console.log("🚀 ~ region:", region);
 
   const { results, total_pages, page } =
     intersection(keys(searchParams), availableParams).length > 0
-      ? await Service.discover.movie({
+      ? await Service.discover.tv({
           ...defaultParams,
           ...searchParams,
           ...{ language: region },
         })
-      : await Service.tv.list( {
+      : await Service.tv.list({
           ...{
             list: type,
-            language: region
-          }
+            language: region,
+          },
         });
 
   const genres = await Service.genre.list("tv", {
-    language: region
+    language: region,
   });
-console.log("==>",results)
-  return     <div className="container space-y-4">
-  <div className="flex justify-end space-x-2">
-    <MovieFilters genres={genres.genres} />
-    <MovieSort type="movie" />
-  </div>
-  {/* <MovieList movies={results} /> */}
-  <ListPagination totalPages={total_pages} currentPage={page} />
-</div>
+  return (
+    <div className="container space-y-4">
+      <div className="flex justify-end space-x-2">
+        <MovieFilters genres={genres.genres} />
+        <MovieSort type="tv" />
+      </div>
+      <TvList tvShows={results} />
+      <ListPagination totalPages={total_pages} currentPage={page} />
+    </div>
+  );
 }

@@ -67,7 +67,9 @@ export function cleanUpTitle(title: string) {
   return title.replace(regex, "").trim();
 }
 
-
-export function getLanguageName(locales:string = 'en-US', code: string) {
-  return new Intl.DisplayNames([locales], { type: "language", languageDisplay:'standard' }).of(code)
+export function getLanguageName(locales: string = "en-US", code: string) {
+  return new Intl.DisplayNames([locales], {
+    type: "language",
+    languageDisplay: "standard",
+  }).of(code);
 }

@@ -19,6 +19,7 @@ export const useSort = (type: "movie" | "tv") => {
 
   const dateField =
     type === "movie" ? "primary_release_date" : "first_air_date";
+  const titleFiled = type === "movie" ? "title" : "name";
 
   const options = [
     { label: "Highest Popularity", value: "popularity.desc", icon: TrendingUp },
@@ -37,8 +38,8 @@ export const useSort = (type: "movie" | "tv") => {
     { label: "Lowest Rating", value: "vote_average.asc", icon: ThumbsDown },
     { label: "Most Voted", value: "vote_count.desc", icon: UserPlus },
     { label: "Least Voted", value: "vote_count.asc", icon: UserMinus },
-    { label: "Title(Z-A)", value: "title.desc", icon: AArrowDown },
-    { label: "Title(A-Z)", value: "title.asc", icon: AArrowUp },
+    { label: "Title(Z-A)", value: `${titleFiled}.desc`, icon: AArrowDown },
+    { label: "Title(A-Z)", value: `${titleFiled}.asc`, icon: AArrowUp },
   ];
 
   const getSort = () => {

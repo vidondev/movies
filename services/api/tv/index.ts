@@ -1,8 +1,6 @@
-
-
-import { TvShow, TvShowDetails } from "@/services/models/tv"
-import { api } from "../api"
-import { ListResponse } from "../types"
+import { TvShow, TvShowDetails } from "@/services/models/tv";
+import { api } from "../api";
+import { ListResponse } from "../types";
 import {
   TvCreditsRequestParams,
   TvDetailsRequestParams,
@@ -13,12 +11,12 @@ import {
   TvReviewsRequestParams,
   TvSimilarRequestParams,
   TvVideosRequestParams,
-} from "./types"
-import { Credits } from "@/services/models/credits"
-import { GetImagesResponse } from "@/services/models/image"
-import { GetVideosResponse } from "@/services/models/videos"
-import { Review } from "@/services/models/reviews"
-import { WatchProviders } from "@/services/models/watch-providers"
+} from "./types";
+import { Credits } from "@/services/models/credits";
+import { GetImagesResponse } from "@/services/models/image";
+import { GetVideosResponse } from "@/services/models/videos";
+import { Review } from "@/services/models/reviews";
+import { WatchProviders } from "@/services/models/watch-providers";
 
 /**
  * Fetches a list of TV shows based on the specified criteria.
@@ -38,7 +36,7 @@ const list = ({ list, page = "1", region, timezone }: TvListRequestParams) =>
       region,
       timezone,
     },
-  })
+  });
 
 /**
  * Fetches detailed information about a specific TV series.
@@ -53,7 +51,7 @@ const detail = <T>({ id, append }: TvDetailsRequestParams) =>
     params: {
       append_to_response: append,
     },
-  })
+  });
 
 /**
  * Fetches the credits (cast and crew) for a specific TV series.
@@ -65,7 +63,7 @@ const detail = <T>({ id, append }: TvDetailsRequestParams) =>
 const credits = ({ id }: TvCreditsRequestParams) =>
   api.fetcher<Credits>({
     endpoint: `tv/${id}/credits`,
-  })
+  });
 
 /**
  * Fetches recommendations for a specific TV series.
@@ -80,7 +78,7 @@ const recommendations = ({ id, page }: TvRecommendationsRequestParams) =>
     params: {
       page,
     },
-  })
+  });
 
 /**
  * Fetches TV shows similar to a specific TV series.
@@ -95,7 +93,7 @@ const similar = ({ id, page }: TvSimilarRequestParams) =>
     params: {
       page,
     },
-  })
+  });
 
 /**
  * Fetches images for a specific TV series.
@@ -110,7 +108,7 @@ const images = ({ id, langs }: TvImagesRequestParams) =>
     params: {
       include_image_language: langs,
     },
-  })
+  });
 
 /**
  * Fetches videos related to a specific TV series.
@@ -122,7 +120,7 @@ const images = ({ id, langs }: TvImagesRequestParams) =>
 const videos = ({ id }: TvVideosRequestParams) =>
   api.fetcher<GetVideosResponse>({
     endpoint: `tv/${id}/videos`,
-  })
+  });
 
 /**
  * Fetches reviews for a specific TV series.
@@ -137,7 +135,7 @@ const reviews = ({ id, page }: TvReviewsRequestParams) =>
     params: {
       page,
     },
-  })
+  });
 
 /**
  * Fetches providers for a specific TV Series.
@@ -152,7 +150,7 @@ const providers = ({ id, region }: TvProvidersRequestParams) =>
     params: {
       watch_region: region,
     },
-  })
+  });
 
 export const tv = {
   list,
@@ -164,6 +162,6 @@ export const tv = {
   videos,
   reviews,
   providers,
-}
+};
 
-export * from "./types"
+export * from "./types";

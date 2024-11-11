@@ -3,7 +3,6 @@ import Link from "next/link";
 import { MediaCard } from "./media-card";
 import { MediaPoster } from "../images/poster";
 import { TvShow } from "@/services/models/tv";
-import { Star } from "lucide-react";
 import { Ratings } from "../ratings";
 
 export const TvCard: React.FC<TvShow> = ({

@@ -69,7 +69,7 @@ export function Sidebar({ className }: SidebarProps) {
         },
         {
           title: "On TV",
-          href: "/tv/category/om-the-air",
+          href: "/tv/category/on-the-air",
           Icon: CalendarDays,
         },
         {
