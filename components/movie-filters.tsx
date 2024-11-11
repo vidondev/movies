@@ -27,11 +27,10 @@ interface MovieFiltersProps {
 
 export const MovieFilters: React.FC<MovieFiltersProps> = ({ genres }) => {
   const pathname = usePathname();
-  const { saveFilters, setFilter, getFilter, clearFilters, count, filters } =
+  const { saveFilters, setFilter, getFilter, clearFilters, count } =
     useFilters("movie", pathname);
 
   const genreFilters = getFilter("with_genres");
-  console.log("===>", filters);
 
   return (
     <Sheet>

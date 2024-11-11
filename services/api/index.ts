@@ -4,6 +4,7 @@ import { discover } from "./discover";
 import { genre } from "./genre";
 import { movie } from "./movie";
 import { trending } from "./trending";
+import { tv } from "./tv";
 
 export const Service = {
   configuration,
@@ -11,5 +12,6 @@ export const Service = {
   movie,
   trending,
   discover,
-  collection
+  collection,
+  tv
 };

@@ -1,7 +1,6 @@
 import { WithMediaType } from "./common";
 import { Language } from "./configuration";
 import { Genre } from "./genre";
-import { Video } from "./videos";
 
 export interface Movie {
   adult: boolean;

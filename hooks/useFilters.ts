@@ -10,7 +10,6 @@ export const useFilters = (type: "movie" | "tv", pathname?: string) => {
 
   useEffect(() => {
     const activeParams = Object.fromEntries(searchParams);
-    console.log("🚀 ~ useEffect ~ activeParams:", activeParams);
     setFilters({ ...filterParams(activeParams) });
   }, [searchParams]);
 
