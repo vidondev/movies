@@ -1,14 +1,13 @@
 import { ListPagination } from "@/components/list-pagination";
 import { MovieFilters } from "@/components/movie-filters";
-import { MovieList } from "@/components/movie-list";
 import { MovieSort } from "@/components/movie-sort";
 import { TvList } from "@/components/tv-list";
-import { availableParams } from "@/config/site";
 import { Service } from "@/services/api";
-import { DiscoverRequestParams } from "@/services/api/discover/types";
-import { MovieType } from "@/services/api/movie/types";
-import { TvListType } from "@/services/api/tv/types";
-import { intersection, keys } from "lodash";
+import {
+  DiscoverRequestParams,
+  DiscoverTvRequestParams,
+} from "@/services/api/discover/types";
+import { add, format } from "date-fns";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
@@ -25,21 +24,21 @@ export async function generateMetadata({
   let title = "";
   switch (params.type) {
     case "popular":
-      title = "Popular";
+      title = "Popular TV Shows";
       break;
-    case "now-playing":
-      title = "Now Playing";
+    case "on-the-air":
+      title = "Currently Airing TV Shows";
       break;
-    case "upcoming":
-      title = "Upcoming";
+    case "airing-today":
+      title = "TV Shows Airing Today";
       break;
     case "top-rated":
-      title = "Top Rated";
+      title = "Top Rated TV Shows";
       break;
   }
 
   return {
-    title: `${title} TV`,
+    title: `${title}`,
   };
 }
 
@@ -47,44 +46,68 @@ export default async function ListPage({
   params,
   searchParams,
 }: ListPageProps) {
-  let type;
-  let defaultParams = {};
+  let defaultParams: DiscoverTvRequestParams = {
+    certification_country: "HK",
+    region: "HK|XX",
+    show_me: "everything",
+    sort_by: "popularity.desc",
+    "vote_average.gte": "0",
+    "vote_average.lte": "10",
+    "vote_count.gte": "0",
+    watch_region: "HK",
+    with_watch_monetization_types: "flatrate|free|ads|rent|buy",
+    "with_runtime.gte": "0",
+    "with_runtime.lte": "400",
+  };
+  const dateFormat = "yyyy-MM-dd";
+  const today = new Date();
   switch (params?.type) {
     case "popular":
-      type = TvListType.POPULAR;
       defaultParams = {
-        certification_country: "US",
-        region: "US|XX",
-        show_me: "everything",
-        with_watch_monetization_types: "flatrate|free|ads|rent|buy",
-      };
-      break;
-    case "on-the-air":
-      type = TvListType.ON_THE_AIR;
-      defaultParams = {
-        "release_date.gte": "2024-09-04",
-        "release_date.lte": "2024-10-16",
-        with_release_type: "3",
+        ...defaultParams,
+        ...{
+          "air_date.lte": format(
+            add(today, {
+              months: 6,
+            }),
+            dateFormat
+          ),
+        },
       };
       break;
     case "airing-today":
-      type = TvListType.AIRING_TODAY;
       defaultParams = {
-        "vote_average.gte": "0",
-        "vote_average.lte": 10,
-        "release_date.gte": "2024-10-16",
-        "release_date.lte": "2024-11-16",
-        "vote_count.gte": "0",
-        with_release_type: "3",
-        sort_by: "popularity.desc",
+        ...defaultParams,
+        ...{
+          "air_date.gte": format(today, dateFormat),
+          "air_date.lte": format(today, dateFormat),
+        },
       };
       break;
-    case "top-rated":
-      type = TvListType.TOP_RATED;
+    case "on-the-air":
       defaultParams = {
-        "release_date.lte": "2025-04-10",
-        "vote_count.gte": "300",
-        sort_by: "vote_average.desc",
+        ...defaultParams,
+        ...{
+          "air_date.gte": format(today, dateFormat),
+          "air_date.lte": format(
+            add(today, {
+              days: 7,
+            }),
+            dateFormat
+          ),
+        },
+      };
+      break;
+
+    case "top-rated":
+      defaultParams = {
+        ...defaultParams,
+        ...{
+          "air_date.lte": format(today, dateFormat),
+          sort_by: "vote_average.desc",
+          "vote_count.gte": "200",
+          with_watch_monetization_types: "",
+        },
       };
       break;
     default:
@@ -94,19 +117,13 @@ export default async function ListPage({
   const region = cookies().get("region")?.value ?? "US";
   console.log("🚀 ~ region:", region);
 
-  const { results, total_pages, page } =
-    intersection(keys(searchParams), availableParams).length > 0
-      ? await Service.discover.tv({
-          ...defaultParams,
-          ...searchParams,
-          ...{ language: region },
-        })
-      : await Service.tv.list({
-          ...{
-            list: type,
-            language: region,
-          },
-        });
+  const { results, total_pages, page } = await Service.discover.tv({
+    ...{
+      ...defaultParams,
+      ...searchParams,
+      language: region,
+    },
+  });
 
   const genres = await Service.genre.list("tv", {
     language: region,

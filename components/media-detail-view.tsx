@@ -79,27 +79,25 @@ const Intro: React.FC<ComponentProps<"p">> = ({ className, ...props }) => {
 };
 
 export const SkeletonMediaDetail = () => (
-  <MediaDetailView.Root>
-    <MediaDetailView.Backdrop>
-      <Skeleton className="size-full rounded-md" />
+  <MediaDetailView.Root className="relative">
+    <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden lg:rounded-l-lg lg:!rounded-b-none z-0">
+      <Skeleton className="size-full" />
     </MediaDetailView.Backdrop>
 
-    <MediaDetailView.Hero>
-      <MediaDetailView.Poster>
-        <Skeleton className="size-full rounded-md" />
-      </MediaDetailView.Poster>
-
-      <div className="space-y-4">
-        <Skeleton className="h-6 w-40 rounded-md" />
-        <Skeleton className="h-4 w-60 rounded-md" />
-        <Skeleton className="h-4 w-full rounded-md" />
-        <Skeleton className="h-4 w-full rounded-md" />
-        <Skeleton className="h-4 w-full rounded-md" />
-      </div>
-    </MediaDetailView.Hero>
-
     <MediaDetailView.Content>
-      <Skeleton className="mt-4 h-[30vh] w-full rounded-md" />
+      <MediaDetailView.Hero className="pt-[20vh] mt-0">
+        <MediaDetailView.Poster>
+          <Skeleton className="size-full rounded-md" />
+        </MediaDetailView.Poster>
+
+        <div className="space-y-4">
+          <Skeleton className="h-6 w-40 rounded-md" />
+          <Skeleton className="h-4 w-60 rounded-md" />
+          <Skeleton className="h-4 w-full rounded-md" />
+          <Skeleton className="h-4 w-full rounded-md" />
+          <Skeleton className="h-4 w-full rounded-md" />
+        </div>
+      </MediaDetailView.Hero>
     </MediaDetailView.Content>
   </MediaDetailView.Root>
 );

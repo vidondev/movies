@@ -73,4 +73,6 @@ export type DiscoverTvRequestParams = DiscoverRequestParams & {
   first_air_date_year?: string;
   "first_air_date.gte"?: string;
   "first_air_date.lte"?: string;
+  region?: string;
+  show_me?: string;
 };

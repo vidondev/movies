@@ -13,7 +13,7 @@ const Content: React.FC<ComponentProps<"div">> = ({ className, ...props }) => {
 const Title: React.FC<ComponentProps<"h2">> = ({ className, ...props }) => {
   return (
     <h2
-      className={cn("line-clamp-1 text-sm font-medium md:text-lg", className)}
+      className={cn("line-clamp-1 text-sm font-medium md:text-base", className)}
       {...props}
     />
   );

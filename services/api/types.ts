@@ -25,7 +25,8 @@ type Keyword = {
 };
 
 export type WithKeywords = {
-  keywords: Keyword[];
+  keywords?: Keyword[];
+  results?: Keyword[];
 };
 
 export type WithExternalIds = {

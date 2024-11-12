@@ -1,45 +1,41 @@
-import { MediaPoster } from "@/components/images/poster";
-import { MediaBackdrop } from "@/components/media-backdrop";
-import { MediaDetailView } from "@/components/media-detail-view";
-import { MediaTrailerDialog } from "@/components/media-trailer-dialog";
-import { Ratings } from "@/components/ratings";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { format } from "@/lib/format";
-import { cleanUpTitle, cn, formatTime, formatValue, joiner } from "@/lib/utils";
 import { Service } from "@/services/api";
+import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
 import {
-  WithCredits,
-  WithExternalIds,
-  WithKeywords,
-  WithVideos,
-} from "@/services/api/types";
-import { Crew } from "@/services/models/credits";
-import {
-  flatten,
-  groupBy,
-  head,
-  kebabCase,
-  reduce,
-  toPairs,
-  values,
-} from "lodash";
+  MediaDetailView,
+  SkeletonMediaDetail,
+} from "@/components/media-detail-view";
+import { MediaBackdrop } from "@/components/media-backdrop";
+import { MediaPoster } from "@/components/images/poster";
+import { Ratings } from "@/components/ratings";
 import {
   CalendarDays,
   Clock,
   Eye,
   Facebook,
   Instagram,
+  LinkIcon,
   Twitter,
 } from "lucide-react";
+import { MediaTrailerDialog } from "@/components/media-trailer-dialog";
+import {
+  WithCredits,
+  WithExternalIds,
+  WithKeywords,
+  WithVideos,
+} from "@/services/api/types";
 import Link from "next/link";
-import { RedirectType, notFound, redirect } from "next/navigation";
-import { Link as LinkIcon } from "lucide-react";
 import { CarouselPeople } from "@/components/carousel-people";
-import { MovieCollection } from "@/components/movie-collection";
+import { flatten, groupBy, reduce, toPairs, values } from "lodash";
+import { Crew } from "@/services/models/credits";
+import { Badge } from "@/components/ui/badge";
+import { cn, formatValue, joiner } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import { CarouselImages } from "@/components/carousel-images";
 import { CarouselVideos } from "@/components/carousel-videos";
-import { cookies } from "next/headers";
+import { MovieCollection } from "@/components/movie-collection";
+import { TvShowCollection } from "@/components/tv-collection";
+import { CarouselSeasons } from "@/components/carousel-seasons";
 
 export default async function MovieDetail({
   params,
@@ -47,75 +43,68 @@ export default async function MovieDetail({
   params: { id: string };
 }) {
   const { id } = params;
-  const [movie_id, ...args] = id.split("-");
-  if (isNaN(parseInt(movie_id))) return notFound();
+  const [series_id, ...args] = id.split("-");
+  if (isNaN(parseInt(series_id))) return notFound();
   const region = cookies().get("region")?.value ?? "US";
-
-  const movie = await Service.movie.detail<
+  const tvShow = await Service.tv.detail<
     WithVideos & {
       credits: WithCredits;
     } & {
       keywords: WithKeywords;
     } & { external_ids: WithExternalIds }
-  >(parseInt(movie_id), {
+  >(series_id, {
+    language: region,
     append_to_response: "videos,credits,keywords,external_ids",
-    language: region,
   });
 
-  const images = await Service.movie.images(movie.id, {
-    language: region,
+  const images = await Service.tv.images(series_id, {
+    // language: region,
   });
-  const videos = await Service.movie.videos(movie.id, {
-    language: region,
-  });
-
-  const crews = toPairs(
-    groupBy(
-      movie.credits.crew.filter(
-        (crew) =>
-          crew.department === "Directing" || crew.department === "Writing"
-      ),
-      "original_name"
-    )
-  ).map(([name, crew]) => {
-    return {
-      name: name,
-      jobs: crew.map((c) => c.job).join(", "),
-      profile_path: head(crew)?.profile_path,
-    };
+  console.log("🚀 ~ region:", region);
+  console.log("🚀 ~ images:", images);
+  const videos = await Service.tv.videos(series_id, {
+    // language: region,
   });
 
-  if (
-    kebabCase(cleanUpTitle(movie.original_title)) !== kebabCase(args.join("-"))
-  ) {
-    redirect(
-      `/movies/${movie_id}-${kebabCase(cleanUpTitle(movie.original_title))}`,
-      RedirectType.replace
-    );
-  }
-
+  const groupByName = groupBy(tvShow.credits.crew, "original_name");
+  const pairCrews = flatten(
+    toPairs(groupByName).map(([name, crews]) => {
+      return values(
+        reduce(
+          crews,
+          function (result, value) {
+            result[value.original_name] = {
+              ...value,
+              job: result[value.original_name]
+                ? result[value.original_name].job + ", " + value.job
+                : value.job,
+            };
+            return result;
+          },
+          {} as Record<string, Crew>
+        )
+      );
+    })
+  );
   const overviews = [
     {
       title: "Status",
-      value: formatValue(movie.status),
+      value: formatValue(tvShow.status),
     },
     {
-      title: "Budget",
-      value: formatValue(movie.budget, format.currency),
-    },
-    {
-      title: "Revenue",
-      value: formatValue(movie.revenue, format.currency),
+      title: "Type",
+      value: formatValue(tvShow.type),
     },
     {
       title: "Language",
-      value: joiner(movie.spoken_languages, "english_name"),
+      value: joiner(tvShow.spoken_languages, "english_name"),
     },
+
     {
       title: "Keywords",
       value: (
         <div className="flex flex-wrap gap-1">
-          {movie.keywords.keywords?.map(({ id, name }) => (
+          {tvShow.keywords.results?.map(({ id, name }) => (
             <Badge className="">
               <Link key={id} href={`/`}>
                 {name}
@@ -126,83 +115,63 @@ export default async function MovieDetail({
       ),
     },
   ];
-  const groupByName = groupBy(movie.credits.crew, "original_name");
-  const pairCrews = toPairs(groupByName).map(([name, crews]) => {
-    return values(
-      reduce(
-        crews,
-        function (result, value) {
-          result[value.original_name] = {
-            ...value,
-            job: result[value.original_name]
-              ? result[value.original_name].job + ", " + value.job
-              : value.job,
-          };
-          return result;
-        },
-        {} as Record<string, Crew>
-      )
-    );
-  });
+
+  // return <SkeletonMediaDetail />;
 
   return (
     <MediaDetailView.Root className="relative h-full bg-accent">
       <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden lg:rounded-l-lg lg:!rounded-b-none z-0">
-        <MediaBackdrop alt={movie.original_title} image={movie.backdrop_path} />
+        <MediaBackdrop alt={tvShow.name} image={tvShow.backdrop_path} />
       </MediaDetailView.Backdrop>
       <MediaDetailView.Content className="space-y-5 mb-10 relative z-10">
         <MediaDetailView.Hero className="pt-[20vh] mt-0">
           <MediaDetailView.Poster className="hidden md:block">
             <MediaPoster
               className="rounded-lg border border-input"
-              alt={movie.original_title}
-              image={movie.poster_path}
+              alt={tvShow.name}
+              image={tvShow.poster_path}
             />
           </MediaDetailView.Poster>
           <MediaDetailView.Intro className="text-accent-foreground">
-            <h1 className="text-3xl">{movie.title}</h1>
+            <h1 className="text-3xl">{tvShow.name}</h1>
             <div className="flex flex-col sm:space-y-0 sm:flex-row sm:space-x-4">
               <div className="flex space-x-1 ">
                 <Ratings
-                  rating={(movie.vote_average / 10) * 5}
+                  rating={(tvShow.vote_average / 10) * 5}
                   variant="yellow"
                   size={16}
                 />
-                <span className="">{movie.vote_average.toFixed(1)}</span>
+                <span className="">{tvShow.vote_average.toFixed(1)}</span>
               </div>
               <div className="flex space-x-1 items-center">
                 <Eye className="text-yellow-500" size={16} />
-                <span className="">{movie.vote_count}</span>
+                <span className="">{tvShow.vote_count}</span>
               </div>
               <div className="flex space-x-1 items-center">
                 <CalendarDays className="text-yellow-500" size={16} />
-                <span className="">{movie.release_date}</span>
-              </div>
-              <div className="flex space-x-1 items-center">
-                <Clock className="text-yellow-500" size={16} />
-                <span className="">{formatTime(movie.runtime)}</span>
+                <span className="">{tvShow.first_air_date}</span>
               </div>
             </div>
             <div>
-              <MediaTrailerDialog videos={movie?.videos.results ?? []} />
+              <MediaTrailerDialog videos={tvShow?.videos.results ?? []} />
             </div>
             <MediaDetailView.Genres>
-              {movie.genres.map((genre, index) => (
+              {tvShow.genres.map((genre, index) => (
                 <Link key={genre.id} href={`/`}>
                   <MediaDetailView.Genre>{genre.name}</MediaDetailView.Genre>
                 </Link>
               ))}
             </MediaDetailView.Genres>
             <div className="">
-              <h3 className="italic opacity-70">{movie.tagline}</h3>
+              <h3 className="italic opacity-70">{tvShow.tagline}</h3>
               <h3 className="text-2xl">Overview</h3>
-              <p className="text-sm">{movie.overview}</p>
+              <p className="text-sm">{tvShow.overview}</p>
             </div>
             <div className="grid grid-cols-3 gap-3">
-              {crews.map((crew) => (
-                <div>
-                  <p>{crew.name}</p>
-                  <p className="text-sm">{crew.jobs}</p>
+              {tvShow.created_by.map((creator) => (
+                <div key={`creator-${creator.id}`}>
+                  <p>{creator.name}</p>
+                  <p className="text-sm">Creator</p>
                 </div>
               ))}
             </div>
@@ -210,36 +179,39 @@ export default async function MovieDetail({
         </MediaDetailView.Hero>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-3 space-y-4">
-            <CarouselPeople
-              title="Cast"
-              items={movie.credits.cast.map((cast) => {
-                return {
-                  id: cast.id,
-                  name: cast.name,
-                  profile_path: cast.profile_path,
-                  character: cast.character,
-                };
-              })}
-            />
-            <CarouselPeople
-              title="Crew"
-              items={flatten(pairCrews).map((cast) => {
-                return {
-                  id: cast.id,
-                  name: cast.name,
-                  profile_path: cast.profile_path,
-                  character: cast.job,
-                };
-              })}
-            />
+            {tvShow.credits.cast.length > 0 && (
+              <CarouselPeople
+                title="Cast"
+                items={tvShow.credits.cast.map((cast) => {
+                  return {
+                    id: cast.id,
+                    name: cast.name,
+                    profile_path: cast.profile_path,
+                    character: cast.character,
+                  };
+                })}
+              />
+            )}
+            {pairCrews.length > 0 && (
+              <CarouselPeople
+                title="Crew"
+                items={pairCrews.map((cast) => {
+                  return {
+                    id: cast.id,
+                    name: cast.name,
+                    profile_path: cast.profile_path,
+                    character: cast.job,
+                  };
+                })}
+              />
+            )}
             {images.posters.length > 0 && (
               <CarouselImages
                 title="Posters"
-                items={[...images.posters]}
+                items={[...images.backdrops]}
                 type="poster"
               />
             )}
-
             {images.backdrops.length > 0 && (
               <CarouselImages
                 title="Backdrops"
@@ -254,41 +226,47 @@ export default async function MovieDetail({
                 type="backdrop"
               />
             )}
-
-            {movie.belongs_to_collection && (
+            {tvShow.seasons.length > 0 && (
+              <CarouselSeasons
+                title="Seasons"
+                items={tvShow.seasons}
+                type="poster"
+              />
+            )}
+            {tvShow.last_episode_to_air && (
               <>
                 <Separator className="bg-accent-foreground" />
-                <MovieCollection id={movie.belongs_to_collection.id} />
+                <TvShowCollection tvShow={tvShow} />
               </>
             )}
           </div>
           <div>
             <div className="mb-4">
               <ul className="flex space-x-4">
-                {movie.external_ids.facebook_id && (
+                {tvShow.external_ids.facebook_id && (
                   <li>
                     <Link
-                      href={`https://facebook.com/${movie.external_ids.facebook_id}`}
+                      href={`https://facebook.com/${tvShow.external_ids.facebook_id}`}
                       target="blank"
                     >
                       <Facebook />
                     </Link>
                   </li>
                 )}
-                {movie.external_ids.twitter_id && (
+                {tvShow.external_ids.twitter_id && (
                   <li>
                     <Link
-                      href={`https://x.com/${movie.external_ids.twitter_id}`}
+                      href={`https://x.com/${tvShow.external_ids.twitter_id}`}
                       target="blank"
                     >
                       <Twitter />
                     </Link>
                   </li>
                 )}
-                {movie.external_ids.instagram_id && (
+                {tvShow.external_ids.instagram_id && (
                   <li>
                     <Link
-                      href={`https://www.instagram.com/${movie.external_ids.instagram_id}`}
+                      href={`https://www.instagram.com/${tvShow.external_ids.instagram_id}`}
                       target="blank"
                     >
                       <Instagram />
@@ -296,15 +274,15 @@ export default async function MovieDetail({
                   </li>
                 )}
 
-                {movie.external_ids.instagram_id &&
-                  movie.external_ids.facebook_id &&
-                  movie.external_ids.twitter_id && (
+                {tvShow.external_ids.instagram_id &&
+                  tvShow.external_ids.facebook_id &&
+                  tvShow.external_ids.twitter_id && (
                     <li>
                       <Separator orientation="vertical" />
                     </li>
                   )}
                 <li>
-                  <Link href={`${movie.homepage}`} target="blank">
+                  <Link href={`${tvShow.homepage}`} target="blank">
                     <LinkIcon />
                   </Link>
                 </li>

@@ -1,6 +1,5 @@
 import { MediaBackdrop } from "@/components/media-backdrop";
 import { Service } from "@/services/api";
-import { MovieDetails } from "@/services/models/movie";
 import { MovieCollectionDialog } from "./movie-collection-dialog";
 import { cookies } from "next/headers";
 

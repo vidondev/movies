@@ -2,15 +2,15 @@ import React from "react";
 import Link from "next/link";
 import { MediaCard } from "./media-card";
 import { MediaPoster } from "../images/poster";
-import { TvShow } from "@/services/models/tv";
+import { Season, TvShow } from "@/services/models/tv";
 import { Ratings } from "../ratings";
 
-export const TvCard: React.FC<TvShow> = ({
+export const SeasonCard: React.FC<Season> = ({
   id,
   poster_path,
   name,
   vote_average,
-  first_air_date,
+  episode_count,
 }) => {
   return (
     <MediaCard.Root className="poster">
@@ -21,11 +21,7 @@ export const TvCard: React.FC<TvShow> = ({
       </Link>
       <MediaCard.Content>
         <MediaCard.Title>{name}</MediaCard.Title>
-        <div className="flex items-center text-muted-foreground space-x-1">
-          <Ratings rating={(vote_average / 10) * 5} variant="yellow" />
-          <span>{vote_average.toFixed(1)}</span>
-        </div>
-        <MediaCard.Excerpt>{first_air_date}</MediaCard.Excerpt>
+        <MediaCard.Excerpt>{`${episode_count} Episodes`}</MediaCard.Excerpt>
       </MediaCard.Content>
     </MediaCard.Root>
   );

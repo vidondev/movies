@@ -1,4 +1,3 @@
-
 export enum TvListType {
   POPULAR = "popular",
   TOP_RATED = "top_rated",
@@ -6,48 +5,48 @@ export enum TvListType {
   AIRING_TODAY = "airing_today",
 }
 
-
 export type TvListRequestParams = {
-  list: TvListType
-  page?: string
-  region?: string
-  timezone?: string
-}
+  list: TvListType;
+  page?: string;
+  region?: string;
+  timezone?: string;
+};
 
 export type TvDetailsRequestParams = {
-  id: string
-  append?: string
-}
+  language?: string;
+  append_to_response?: string;
+};
 
 export type TvCreditsRequestParams = {
-  id: string | number
-}
+  id: string | number;
+};
 
 export type TvRecommendationsRequestParams = {
-  id: string | number
-  page?: string
-}
+  id: string | number;
+  page?: string;
+};
 
 export type TvSimilarRequestParams = {
-  id: string | number
-  page?: string
-}
+  id: string | number;
+  page?: string;
+};
 
 export type TvImagesRequestParams = {
-  id: string | number
-  langs?: string
-}
+  include_image_language?: string;
+  language?: string;
+};
 
 export type TvVideosRequestParams = {
-  id: string | number
-}
+  include_video_language?: string;
+  language?: string;
+};
 
 export type TvReviewsRequestParams = {
-  id: string | number
-  page?: string
-}
+  id: string | number;
+  page?: string;
+};
 
 export type TvProvidersRequestParams = {
-  id: string | number
-  region?: string
-}
+  id: string | number;
+  region?: string;
+};

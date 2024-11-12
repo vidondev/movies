@@ -73,3 +73,7 @@ export function getLanguageName(locales: string = "en-US", code: string) {
     languageDisplay: "standard",
   }).of(code);
 }
+
+export function pad(value: number) {
+  return String(value).padStart(2, "0");
+}

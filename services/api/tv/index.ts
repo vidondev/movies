@@ -18,6 +18,8 @@ import { GetVideosResponse } from "@/services/models/videos";
 import { Review } from "@/services/models/reviews";
 import { WatchProviders } from "@/services/models/watch-providers";
 
+const PREFIX = "/tv";
+
 /**
  * Fetches a list of TV shows based on the specified criteria.
  *
@@ -30,7 +32,7 @@ import { WatchProviders } from "@/services/models/watch-providers";
  */
 const list = ({ list, page = "1", region, timezone }: TvListRequestParams) =>
   api.fetcher<ListResponse<TvShow>>({
-    endpoint: `/tv/${list}`,
+    endpoint: `${PREFIX}/${list}`,
     params: {
       page,
       region,
@@ -45,12 +47,14 @@ const list = ({ list, page = "1", region, timezone }: TvListRequestParams) =>
  * @returns {Promise<TvShowDetails>} A promise that resolves to the detailed information about the TV series.
  * @see https://developer.themoviedb.org/reference/tv-series-details
  */
-const detail = <T>({ id, append }: TvDetailsRequestParams) =>
+
+const detail = <T>(
+  series_id: number | string,
+  params?: TvDetailsRequestParams
+) =>
   api.fetcher<TvShowDetails & T>({
-    endpoint: `tv/${id}`,
-    params: {
-      append_to_response: append,
-    },
+    endpoint: `${PREFIX}/${series_id}`,
+    params: params,
   });
 
 /**
@@ -102,12 +106,11 @@ const similar = ({ id, page }: TvSimilarRequestParams) =>
  * @returns {Promise<GetImagesResponse>} A promise that resolves to the images of the TV series.
  * @see https://developer.themoviedb.org/reference/tv-series-images
  */
-const images = ({ id, langs }: TvImagesRequestParams) =>
+
+const images = (series_id: number | string, params?: TvImagesRequestParams) =>
   api.fetcher<GetImagesResponse>({
-    endpoint: `tv/${id}/images`,
-    params: {
-      include_image_language: langs,
-    },
+    endpoint: `${PREFIX}/${series_id}/images`,
+    params: params,
   });
 
 /**
@@ -117,9 +120,10 @@ const images = ({ id, langs }: TvImagesRequestParams) =>
  * @returns {Promise<GetVideosResponse>} A promise that resolves to the videos of the TV series.
  * @see https://developer.themoviedb.org/reference/tv-series-videos
  */
-const videos = ({ id }: TvVideosRequestParams) =>
+const videos = (series_id: number | string, params?: TvVideosRequestParams) =>
   api.fetcher<GetVideosResponse>({
-    endpoint: `tv/${id}/videos`,
+    endpoint: `${PREFIX}/${series_id}/videos`,
+    params: params,
   });
 
 /**
