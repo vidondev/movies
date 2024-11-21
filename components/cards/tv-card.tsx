@@ -13,7 +13,7 @@ export const TvCard: React.FC<TvShow> = ({
   first_air_date,
 }) => {
   return (
-    <MediaCard.Root className="poster">
+    <MediaCard.Root className="media-card">
       <Link href={`/tv/${id}`} key={id} prefetch={false} title={name}>
         <div className="aspect-poster">
           <MediaPoster image={poster_path} alt={name} />

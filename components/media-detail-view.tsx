@@ -78,6 +78,32 @@ const Intro: React.FC<ComponentProps<"p">> = ({ className, ...props }) => {
   );
 };
 
+interface OverviewDetailProps {
+  overviews: {
+    title: string;
+    value: any;
+  }[];
+}
+const OverviewDetail: React.FC<OverviewDetailProps> = ({ overviews }) => {
+  return (
+    <ol className="space-y-4 grid grid-cols-2 md:grid-cols-1">
+      {overviews.map((overview, index) => (
+        <li
+          key={`item-${index}`}
+          className={cn(
+            index === overviews.length - 1 ? "col-span-2 md:col-span-1" : ""
+          )}
+        >
+          <p>
+            <strong>{overview.title}</strong>
+          </p>
+          <div className="text-sm text-muted-foreground">{overview.value}</div>
+        </li>
+      ))}
+    </ol>
+  );
+};
+
 export const SkeletonMediaDetail = () => (
   <MediaDetailView.Root className="relative">
     <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden lg:rounded-l-lg lg:!rounded-b-none z-0">
@@ -112,5 +138,6 @@ export const MediaDetailView = {
   Genre,
   Title,
   Overview,
+  OverviewDetail,
   Intro,
 };

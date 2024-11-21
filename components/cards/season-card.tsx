@@ -13,7 +13,7 @@ export const SeasonCard: React.FC<Season> = ({
   episode_count,
 }) => {
   return (
-    <MediaCard.Root className="poster">
+    <MediaCard.Root className="media-card">
       <Link href={`/tv/${id}`} key={id} prefetch={false} title={name}>
         <div className="aspect-poster">
           <MediaPoster image={poster_path} alt={name} />

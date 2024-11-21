@@ -101,7 +101,7 @@
   }
 }
 
-.poster {
+.media-card {
   & > a {
     @apply block rounded-md transition duration-300 overflow-hidden relative;
     &::before {

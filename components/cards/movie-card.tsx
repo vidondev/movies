@@ -14,7 +14,7 @@ export const MovieCard: React.FC<Movie> = (props) => {
     props;
 
   return (
-    <MediaCard.Root className="poster">
+    <MediaCard.Root className="media-card">
       <Link
         href={`/movies/${id}-${kebabCase(cleanUpTitle(original_title))}`}
         key={id}

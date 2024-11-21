@@ -36,6 +36,7 @@ import { CarouselVideos } from "@/components/carousel-videos";
 import { MovieCollection } from "@/components/movie-collection";
 import { TvShowCollection } from "@/components/tv-collection";
 import { CarouselSeasons } from "@/components/carousel-seasons";
+import { MediaLogo } from "@/components/images/logo";
 
 export default async function MovieDetail({
   params,
@@ -58,12 +59,11 @@ export default async function MovieDetail({
   });
 
   const images = await Service.tv.images(series_id, {
-    // language: region,
+    language: region,
   });
-  console.log("🚀 ~ region:", region);
-  console.log("🚀 ~ images:", images);
+
   const videos = await Service.tv.videos(series_id, {
-    // language: region,
+    language: region,
   });
 
   const groupByName = groupBy(tvShow.credits.crew, "original_name");
@@ -88,8 +88,29 @@ export default async function MovieDetail({
   );
   const overviews = [
     {
+      title: "Original Name",
+      value: formatValue(tvShow.original_name),
+    },
+    {
       title: "Status",
       value: formatValue(tvShow.status),
+    },
+    {
+      title: "Network",
+      value: (
+        <div className="flex flex-wrap gap-3">
+          {tvShow.networks.map(({ id, name, logo_path }) => (
+            <div className="relative max-h-[30px] min-w-[154px]">
+              <MediaLogo
+                alt={name}
+                image={logo_path}
+                key={`logo-${id}`}
+                className="w-fit"
+              />
+            </div>
+          ))}
+        </div>
+      ),
     },
     {
       title: "Type",
@@ -115,8 +136,6 @@ export default async function MovieDetail({
       ),
     },
   ];
-
-  // return <SkeletonMediaDetail />;
 
   return (
     <MediaDetailView.Root className="relative h-full bg-accent">
@@ -156,7 +175,7 @@ export default async function MovieDetail({
               <MediaTrailerDialog videos={tvShow?.videos.results ?? []} />
             </div>
             <MediaDetailView.Genres>
-              {tvShow.genres.map((genre, index) => (
+              {tvShow.genres.map((genre) => (
                 <Link key={genre.id} href={`/`}>
                   <MediaDetailView.Genre>{genre.name}</MediaDetailView.Genre>
                 </Link>
@@ -288,23 +307,7 @@ export default async function MovieDetail({
                 </li>
               </ul>
             </div>
-            <ol className="space-y-2 grid grid-cols-2 md:grid-cols-1">
-              {overviews.map((overview, index) => (
-                <li
-                  key={`item-${index}`}
-                  className={cn(
-                    index === overviews.length - 1
-                      ? "col-span-2 md:col-span-1"
-                      : ""
-                  )}
-                >
-                  <p>
-                    <strong>{overview.title}</strong>
-                  </p>
-                  <div>{overview.value}</div>
-                </li>
-              ))}
-            </ol>
+            <MediaDetailView.OverviewDetail overviews={overviews} />
           </div>
         </div>
       </MediaDetailView.Content>

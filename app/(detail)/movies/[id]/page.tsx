@@ -310,23 +310,7 @@ export default async function MovieDetail({
                 </li>
               </ul>
             </div>
-            <ol className="space-y-2 grid grid-cols-2 md:grid-cols-1">
-              {overviews.map((overview, index) => (
-                <li
-                  key={`item-${index}`}
-                  className={cn(
-                    index === overviews.length - 1
-                      ? "col-span-2 md:col-span-1"
-                      : ""
-                  )}
-                >
-                  <p>
-                    <strong>{overview.title}</strong>
-                  </p>
-                  <div>{overview.value}</div>
-                </li>
-              ))}
-            </ol>
+            <MediaDetailView.OverviewDetail overviews={overviews} />
           </div>
         </div>
       </MediaDetailView.Content>
