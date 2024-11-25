@@ -19,6 +19,7 @@ export default async function SeasonDetail({
 
   return (
     <TvSeasonDialog
+      seriesId={params.id}
       seasonDetails={seasonDetail}
       closeHref={`/tv/${params.id}`}
     />
