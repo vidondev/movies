@@ -1,10 +1,7 @@
 import { Service } from "@/services/api";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import {
-  MediaDetailView,
-  SkeletonMediaDetail,
-} from "@/components/media-detail-view";
+import { MediaDetailView } from "@/components/media-detail-view";
 import { MediaBackdrop } from "@/components/media-backdrop";
 import { MediaPoster } from "@/components/images/poster";
 import { Ratings } from "@/components/ratings";
@@ -33,15 +30,17 @@ import { cn, formatValue, joiner } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { CarouselImages } from "@/components/carousel-images";
 import { CarouselVideos } from "@/components/carousel-videos";
-import { MovieCollection } from "@/components/movie-collection";
 import { TvShowCollection } from "@/components/tv-collection";
 import { CarouselSeasons } from "@/components/carousel-seasons";
 import { MediaLogo } from "@/components/images/logo";
+import { TvSeasonDialog } from "@/components/tv-season-dialog";
 
-export default async function MovieDetail({
+export default async function Page({
   params,
+  searchParams,
 }: {
   params: { id: string };
+  searchParams: { season: string };
 }) {
   const { id } = params;
   const [series_id, ...args] = id.split("-");
@@ -249,7 +248,7 @@ export default async function MovieDetail({
               <CarouselSeasons
                 title="Seasons"
                 items={tvShow.seasons}
-                type="poster"
+                series_id={tvShow.id}
               />
             )}
             {tvShow.last_episode_to_air && (

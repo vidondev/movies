@@ -1,4 +1,4 @@
-import { TvShow, TvShowDetails } from "@/services/models/tv";
+import { SeasonDetails, TvShow, TvShowDetails } from "@/services/models/tv";
 import { api } from "../api";
 import { ListResponse } from "../types";
 import {

@@ -12,26 +12,20 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { VideoCard } from "./images/video";
-import { Video } from "@/services/models/videos";
-import { DialogVideo } from "./dialog-video";
 import { useCount } from "@/hooks/useCount";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
-import { yt } from "@/lib/yt";
 import { Season } from "@/services/models/tv";
-import { TvCard } from "./cards/tv-card";
 import { SeasonCard } from "./cards/season-card";
 
 interface CarouselSeasonsProps {
   title?: string;
   items: Season[];
-  type: "poster" | "backdrop";
+  series_id: number;
 }
 
 export const CarouselSeasons: React.FC<CarouselSeasonsProps> = ({
   title,
   items,
-  type = "poster",
+  series_id,
 }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -108,7 +102,7 @@ export const CarouselSeasons: React.FC<CarouselSeasonsProps> = ({
               key={`item-${index}`}
               className={cn("carousel-item-backdrop")}
             >
-              <SeasonCard {...item} />
+              <SeasonCard {...item} series_id={series_id} />
             </CarouselItem>
           ))}
         </CarouselContent>
