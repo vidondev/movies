@@ -49,7 +49,7 @@ export default async function MovieDetail({
   const { id } = params;
   const [movie_id, ...args] = id.split("-");
   if (isNaN(parseInt(movie_id))) return notFound();
-  const region = cookies().get("region")?.value ?? "US";
+  const region = cookies().get("region")?.value ?? "en-US";
 
   const movie = await Service.movie.detail<
     WithVideos & {

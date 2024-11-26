@@ -9,6 +9,10 @@ export default async function SeasonDetail({
 }) {
   const region = cookies().get("region")?.value ?? "US";
 
+  const tvShow = await Service.tv.detail(params.id, {
+    language: region,
+  });
+
   const seasonDetail = await Service.tvSeasons.details({
     id: params.id,
     season: params.season_id,
@@ -16,9 +20,11 @@ export default async function SeasonDetail({
       language: region,
     },
   });
+  console.log("🚀 ~ seasonDetail:", seasonDetail);
 
   return (
     <TvSeasonDialog
+      tvShow={tvShow}
       seriesId={params.id}
       seasonDetails={seasonDetail}
       closeHref={`/tv/${params.id}`}

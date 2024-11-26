@@ -2,7 +2,13 @@ import { Play } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Video } from "@/services/models/videos";
 import { yt } from "@/lib/yt";
 import { ComponentProps } from "react";
@@ -19,7 +25,10 @@ export const DialogVideo: React.FC<DialogVideoProps> = ({
     <Dialog modal>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="max-w-screen-lg p-0  border-none pt-12 bg-transparent">
+      <DialogContent className="max-w-screen-lg p-0  border-none">
+        <DialogHeader className="pt-4 px-4">
+          <DialogTitle>{video.name}</DialogTitle>
+        </DialogHeader>
         <iframe
           className="size-full rounded-none aspect-video"
           src={yt.video(video.key, true)}
