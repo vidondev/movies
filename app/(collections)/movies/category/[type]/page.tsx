@@ -98,11 +98,11 @@ export default async function ListPage({
         });
 
   const genres = await Service.genre.list("movie", {
-    language: region
+    language: region,
   });
 
   return (
-    <div className="container space-y-4">
+    <div className="container space-y-4 py-4">
       <div className="flex justify-end space-x-2">
         <MovieFilters genres={genres.genres} />
         <MovieSort type="movie" />

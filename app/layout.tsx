@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/sidebar";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import Header from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SiteFooter } from "@/components/site-footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,7 +31,10 @@ export default function RootLayout({
             <div className="pl-0 lg:pl-4 hidden lg:block">
               <Sidebar />
             </div>
-            <main className="lg:ml-10">{children}</main>
+            <div className="lg:ml-10 lg:rounded-tl-lg bg-accent">
+              <main>{children}</main>
+              <SiteFooter />
+            </div>
           </div>
           <TailwindIndicator />
         </ThemeProvider>

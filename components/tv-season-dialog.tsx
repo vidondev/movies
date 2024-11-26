@@ -21,7 +21,7 @@ interface TvSeasonDialogProps extends DialogProps {
   closeHref?: string;
 }
 
-export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = async ({
+export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = ({
   seasonDetails,
   closeHref,
   seriesId,
@@ -30,19 +30,10 @@ export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = async ({
   children,
   ...props
 }) => {
-  console.log("🚀 ~ seasonDetails:", seasonDetails);
   const router = useRouter();
-  const pathname = usePathname();
-  const isOpen =
-    pathname === `/tv/${seriesId}/season/${seasonDetails.season_number}`;
-  console.log(
-    "==>",
-    pathname,
-    isOpen,
-    pathname === `/tv/${seriesId}/season/${seasonDetails.season_number}`
-  );
+
   function handleOpenChange(open: boolean) {
-    router.push(closeHref ?? "/");
+    router.back();
   }
 
   function onOpenAutoFocus(e: Event) {
@@ -50,7 +41,7 @@ export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = async ({
   }
 
   return (
-    <Dialog open={!isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={true} onOpenChange={handleOpenChange}>
       <DialogContent
         onOpenAutoFocus={onOpenAutoFocus}
         className="max-w-screen-lg"
@@ -65,7 +56,7 @@ export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = async ({
         <ScrollArea className="max-h-[75dvh] md:pr-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {seasonDetails.episodes.map((episode) => (
-              <TvEpisodeCard {...episode} />
+              <TvEpisodeCard {...episode} key={episode.id} />
             ))}
           </div>
         </ScrollArea>

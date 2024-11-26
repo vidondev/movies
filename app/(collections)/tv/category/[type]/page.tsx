@@ -129,7 +129,7 @@ export default async function ListPage({
     language: region,
   });
   return (
-    <div className="container space-y-4">
+    <div className="container space-y-4 py-4">
       <div className="flex justify-end space-x-2">
         <MovieFilters genres={genres.genres} />
         <MovieSort type="tv" />

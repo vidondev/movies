@@ -1,97 +1,13 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import {
-  CalendarDays,
-  Clapperboard,
-  Heart,
-  LucideIcon,
-  Play,
-  Star,
-  Tv,
-  UserRound,
-} from "lucide-react";
 import Link from "next/link";
 import { useActiveNav } from "@/hooks/useActiveNav";
+import { NavItem, navItems } from "@/config/site";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
-type NavItem = {
-  title: string;
-  href: string;
-  Icon?: LucideIcon;
-  description?: string;
-  items?: NavItem[];
-};
 
 export function Sidebar({ className }: SidebarProps) {
-  const navItems: NavItem[] = [
-    {
-      title: "Movies",
-      href: "/movies",
-      Icon: Clapperboard,
-      items: [
-        {
-          title: "Popular",
-          href: "/movies/category/popular",
-          Icon: Heart,
-        },
-        {
-          title: "Now Playing",
-          href: "/movies/category/now-playing",
-          Icon: Play,
-        },
-        {
-          title: "Upcoming",
-          href: "/movies/category/upcoming",
-          Icon: CalendarDays,
-        },
-        {
-          title: "Top Rated",
-          href: "/movies/category/top-rated",
-          Icon: Star,
-        },
-      ],
-    },
-    {
-      title: "TV Shows",
-      href: "/tv",
-      Icon: Tv,
-      items: [
-        {
-          title: "Popular",
-          href: "/tv/category/popular",
-          Icon: Heart,
-        },
-        {
-          title: "Airing Today",
-          href: "/tv/category/airing-today",
-          Icon: Play,
-        },
-        {
-          title: "On TV",
-          href: "/tv/category/on-the-air",
-          Icon: CalendarDays,
-        },
-        {
-          title: "Top Rated",
-          href: "/tv/category/top-rated",
-          Icon: Star,
-        },
-      ],
-    },
-    {
-      title: "People",
-      href: "/person",
-      items: [
-        {
-          title: "Popular People",
-          href: "/person",
-          Icon: UserRound,
-        },
-      ],
-    },
-  ];
-
   return (
     <div
       className={cn(

@@ -19,7 +19,7 @@ export const DialogVideo: React.FC<DialogVideoProps> = ({
     <Dialog modal>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="max-w-screen-lg p-0 border-none">
+      <DialogContent className="max-w-screen-lg p-0  border-none pt-12 bg-transparent">
         <iframe
           className="size-full rounded-none aspect-video"
           src={yt.video(video.key, true)}

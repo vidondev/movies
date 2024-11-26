@@ -27,7 +27,7 @@ export const MediaHero: React.FC<MediaHeroProps> = ({
   return (
     <div
       className={cn(
-        "w-full rounded-lg drop-shadow-lg overflow-hidden relative h-hero",
+        "w-full rounded-tl-lg drop-shadow-lg overflow-hidden relative h-hero",
         className
       )}
     >
