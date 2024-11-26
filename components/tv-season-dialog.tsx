@@ -14,6 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Service } from "@/services/api";
 import { SeasonDetails } from "@/services/models/tv";
 import { TvEpisodeCard } from "./tv-episode-card";
+import { useActiveNav } from "@/hooks/useActiveNav";
 
 interface TvSeasonDialogProps extends DialogProps {
   seriesId: string | number;
@@ -31,9 +32,12 @@ export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = ({
   ...props
 }) => {
   const router = useRouter();
+  const { isActive } = useActiveNav(
+    `/tv/${seriesId}/season/${seasonDetails.season_number}`
+  );
 
   function handleOpenChange(open: boolean) {
-    router.back();
+    router.replace(closeHref ?? "/", { scroll: false });
   }
 
   function onOpenAutoFocus(e: Event) {
@@ -41,7 +45,7 @@ export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = ({
   }
 
   return (
-    <Dialog open={true} onOpenChange={handleOpenChange}>
+    <Dialog open={isActive} onOpenChange={handleOpenChange}>
       <DialogContent
         onOpenAutoFocus={onOpenAutoFocus}
         className="max-w-screen-lg"
