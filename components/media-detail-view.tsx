@@ -19,7 +19,7 @@ const Hero: React.FC<ComponentProps<"div">> = ({
 }) => {
   return (
     <div className={cn("mt-4", className)} {...props}>
-      <div className="grid gap-4 md:grid-cols-[auto,1fr]">{children}</div>
+      <div className="grid gap-4 lg:grid-cols-[auto,1fr]">{children}</div>
     </div>
   );
 };

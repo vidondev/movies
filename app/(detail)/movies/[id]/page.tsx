@@ -146,8 +146,8 @@ export default async function MovieDetail({
   });
 
   return (
-    <MediaDetailView.Root className="relative h-full bg-accent">
-      <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden lg:rounded-l-lg lg:!rounded-b-none z-0">
+    <MediaDetailView.Root className="relative">
+      <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden z-0">
         <MediaBackdrop alt={movie.original_title} image={movie.backdrop_path} />
       </MediaDetailView.Backdrop>
       <MediaDetailView.Content className="space-y-5 mb-10 relative z-10">

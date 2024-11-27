@@ -32,7 +32,7 @@ export default async function DetailLayout({
   modal,
 }: DetailLayoutProps) {
   return (
-    <div className="h-full">
+    <div className="bg-accent">
       {children}
       {modal}
     </div>

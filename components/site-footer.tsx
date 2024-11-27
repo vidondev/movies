@@ -6,17 +6,13 @@ import { Icons } from "@/components/icons";
 import { navItems, siteConfig } from "@/config/site";
 import Link from "next/link";
 
-export const SiteFooter: React.FC<ComponentProps<"footer">> = () => {
+export const Footer: React.FC<ComponentProps<"footer">> = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-12">
+    <footer className="container relative">
       <div className="flex flex-col lg:flex-row">
-        <div className="px-2 py-8 text-muted-foreground md:p-12">
-          <Icons.Logo className="size-12" />
-        </div>
-
-        <div className="flex-1 p-12 px-2 py-8 md:p-12">
+        <div className="flex-1 py-8">
           <div className="mb-24 hidden md:flex">
             {navItems.map((item) => (
               <ul className="flex-1" key={item.title}>

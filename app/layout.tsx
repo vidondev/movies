@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.scss";
-import { Sidebar } from "@/components/sidebar";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import Header from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SiteFooter } from "@/components/site-footer";
+import { Footer } from "@/components/site-footer";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,17 +27,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <Header />
-          <div className="app-container relative">
-            <div className="pl-0 lg:pl-4 hidden lg:block">
-              <Sidebar />
-            </div>
-            <div className="lg:ml-10 lg:rounded-tl-lg bg-accent">
-              <main>{children}</main>
-              <SiteFooter />
-            </div>
-          </div>
-          <TailwindIndicator />
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              <Header />
+              {children}
+              <Footer />
+              <TailwindIndicator />
+            </SidebarInset>
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

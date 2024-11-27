@@ -137,8 +137,8 @@ export default async function Page({
   ];
 
   return (
-    <MediaDetailView.Root className="relative h-full bg-accent">
-      <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden lg:rounded-l-lg lg:!rounded-b-none z-0">
+    <MediaDetailView.Root className="relative">
+      <MediaDetailView.Backdrop className="absolute top-0 w-full h-[40vh] overflow-hidden  z-0">
         <MediaBackdrop alt={tvShow.name} image={tvShow.backdrop_path} />
       </MediaDetailView.Backdrop>
       <MediaDetailView.Content className="space-y-5 mb-10 relative z-10">
@@ -195,8 +195,8 @@ export default async function Page({
             </div>
           </MediaDetailView.Intro>
         </MediaDetailView.Hero>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-3 space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="col-span-1 lg:col-span-3 space-y-4">
             {tvShow.credits.cast.length > 0 && (
               <CarouselPeople
                 title="Cast"

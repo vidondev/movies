@@ -26,8 +26,10 @@ export const DialogVideo: React.FC<DialogVideoProps> = ({
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="max-w-screen-lg p-0  border-none">
-        <DialogHeader className="pt-4 px-4">
-          <DialogTitle>{video.name}</DialogTitle>
+        <DialogHeader className="pt-4">
+          <DialogTitle className="line-clamp-1 px-5 pr-8">
+            {video.name}
+          </DialogTitle>
         </DialogHeader>
         <iframe
           className="size-full rounded-none aspect-video"

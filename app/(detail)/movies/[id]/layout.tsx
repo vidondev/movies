@@ -16,5 +16,5 @@ export async function generateMetadata({ params }: DetailLayoutProps) {
 }
 
 export default async function DetailLayout({ children }: DetailLayoutProps) {
-  return <div className="h-full">{children}</div>;
+  return <div className="bg-accent">{children}</div>;
 }

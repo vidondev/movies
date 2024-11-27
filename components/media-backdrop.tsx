@@ -26,7 +26,7 @@ export const MediaBackdrop: React.FC<MediaBackdropProps> = ({
     return (
       <div
         className={cn(
-          "size-full rounded-md border bg-muted text-muted-foreground absolute inset-0 ",
+          "size-full bg-muted text-muted-foreground absolute inset-0 ",
           className
         )}
         {...props}
