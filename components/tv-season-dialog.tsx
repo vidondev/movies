@@ -18,11 +18,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { ChevronLeft, ChevronLeftCircle, ChevronRight } from "lucide-react";
+import { WithCredits } from "@/services/api/types";
+import { MediaCastCard } from "./media-cast-card";
+import { getUniqueItems } from "@/lib/utils";
 
 interface TvSeasonDialogProps extends DialogProps {
   tvShow: TvShowDetails;
   seriesId: string | number;
-  seasonDetails: SeasonDetails;
+  seasonDetails: SeasonDetails & {
+    credits: WithCredits;
+  };
   closeHref?: string;
 }
 
@@ -55,6 +60,11 @@ export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = ({
   const nextSeasonNumber = tvShow.seasons.find(
     (season) => season.season_number === seasonDetails.season_number + 1
   )?.season_number;
+
+  const guestStars = getUniqueItems(
+    seasonDetails.episodes.map((episode) => episode.guest_stars).flat()
+  );
+
   return (
     <Dialog open={isActive} onOpenChange={handleOpenChange}>
       <DialogContent
@@ -101,15 +111,67 @@ export const TvSeasonDialog: React.FC<TvSeasonDialogProps> = ({
           <TabsList className="mb-2">
             <TabsTrigger value="episodes">Episodes</TabsTrigger>
             <TabsTrigger value="cast">Cast</TabsTrigger>
-            <TabsTrigger value="guest-starts">Cast</TabsTrigger>
+            <TabsTrigger value="guest-starts">Guest Starts</TabsTrigger>
             <TabsTrigger value="crew">Crew</TabsTrigger>
           </TabsList>
           <ScrollArea className="md:pr-4">
             <TabsContent value="episodes" className="max-h-[75dvh] mt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {seasonDetails.episodes.map((episode) => (
-                  <TvEpisodeCard {...episode} key={episode.id} />
-                ))}
+                {seasonDetails.episodes.length ? (
+                  seasonDetails.episodes.map((episode) => (
+                    <TvEpisodeCard {...episode} key={episode.id} />
+                  ))
+                ) : (
+                  <div className="empty-box col-span-4">No episodes.</div>
+                )}
+              </div>
+            </TabsContent>
+            <TabsContent value="cast" className="max-h-[75dvh] mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {seasonDetails?.credits.cast?.length ? (
+                  seasonDetails?.credits.cast?.map((item) => (
+                    <MediaCastCard
+                      id={item.id}
+                      profile_path={item.profile_path}
+                      name={item.name}
+                      character={item.character}
+                    />
+                  ))
+                ) : (
+                  <div className="empty-box col-span-4">No Cast.</div>
+                )}
+              </div>
+            </TabsContent>
+            <TabsContent value="guest-starts" className="max-h-[75dvh] mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {guestStars?.length ? (
+                  guestStars?.map((item) => (
+                    <MediaCastCard
+                      id={item.id}
+                      profile_path={item.profile_path}
+                      name={item.name}
+                      character={item.character}
+                    />
+                  ))
+                ) : (
+                  <div className="empty-box col-span-4">No Guest Star.</div>
+                )}
+              </div>
+            </TabsContent>
+            <TabsContent value="crew" className="max-h-[75dvh] mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {seasonDetails?.credits.crew.length ? (
+                  seasonDetails?.credits.crew?.map((item) => (
+                    <MediaCastCard
+                      id={item.id}
+                      profile_path={item.profile_path}
+                      name={item.name}
+                      character={item.job}
+                    />
+                  ))
+                ) : (
+                  <div className="empty-box col-span-4">No Crew.</div>
+                )}
               </div>
             </TabsContent>
           </ScrollArea>

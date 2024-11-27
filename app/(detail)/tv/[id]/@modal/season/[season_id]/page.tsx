@@ -1,5 +1,6 @@
 import { TvSeasonDialog } from "@/components/tv-season-dialog";
 import { Service } from "@/services/api";
+import { WithCredits } from "@/services/api/types";
 import { cookies } from "next/headers";
 
 export default async function SeasonDetail({
@@ -13,10 +14,13 @@ export default async function SeasonDetail({
     language: region,
   });
 
-  const seasonDetail = await Service.tvSeasons.details({
+  const seasonDetail = await Service.tvSeasons.details<{
+    credits: WithCredits;
+  }>({
     id: params.id,
     season: params.season_id,
     params: {
+      append_to_response: "credits",
       language: region,
     },
   });

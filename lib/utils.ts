@@ -77,3 +77,8 @@ export function getLanguageName(locales: string = "en-US", code: string) {
 export function pad(value: number) {
   return String(value).padStart(2, "0");
 }
+
+export function getUniqueItems(list: any[]) {
+  const unique = new Map(list.map((item) => [item.id, item]));
+  return Array.from(unique.values());
+}
