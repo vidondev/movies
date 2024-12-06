@@ -29,7 +29,7 @@ export const MediaHero: React.FC<MediaHeroProps> = ({
     <div className={cn("w-full overflow-hidden relative h-hero", className)}>
       <div className="relative h-full flex flex-col justify-end z-10 p-5 space-y-4  md:px-10">
         <div className="flex flex-col justify-end">
-          <h1 className="text-2xl font-medium leading-tight tracking-tighter md:text-4xl text-white">
+          <h1 className="text-2xl font-medium leading-tight tracking-tighter md:text-4xl text-secondary-foreground">
             {movie.title}
           </h1>
           <div className="flex flex-col sm:space-y-0 sm:flex-row sm:space-x-4">
@@ -39,26 +39,30 @@ export const MediaHero: React.FC<MediaHeroProps> = ({
                 variant="yellow"
                 size={16}
               />
-              <span className="text-slate-100">
+              <span className="text-secondary-foreground">
                 {movie.vote_average.toFixed(1)}
               </span>
             </div>
             <div className="flex space-x-1 items-center">
               <Eye className="text-yellow-500" size={16} />
-              <span className="text-slate-100">{movie.vote_count}</span>
+              <span className="text-secondary-foreground">
+                {movie.vote_count}
+              </span>
             </div>
             <div className="flex space-x-1 items-center">
               <CalendarDays className="text-yellow-500" size={16} />
-              <span className="text-slate-100">{movie.release_date}</span>
+              <span className="text-secondary-foreground">
+                {movie.release_date}
+              </span>
             </div>
             <div className="flex space-x-1 items-center">
               <Clock className="text-yellow-500" size={16} />
-              <span className="text-slate-100">
+              <span className="text-secondary-foreground">
                 {formatTime(movie.runtime)}
               </span>
             </div>
           </div>
-          <p className="line-clamp-3 text-sm text-white md:text-lg">
+          <p className="line-clamp-3 text-sm text-secondary-foreground md:text-lg">
             {movie.overview}
           </p>
         </div>

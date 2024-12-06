@@ -1,3 +1,4 @@
+import Loading from "@/app/(collections)/loading";
 import { ListPagination } from "@/components/list-pagination";
 import { MovieFilters } from "@/components/movie-filters";
 import { MovieList } from "@/components/movie-list";
@@ -83,7 +84,7 @@ export default async function ListPage({
       notFound();
   }
 
-  const region = cookies().get("region")?.value ?? "US";
+  const region = cookies().get("region")?.value ?? "en-US";
 
   const { results, total_pages, page } =
     intersection(keys(searchParams), availableParams).length > 0

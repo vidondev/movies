@@ -10,7 +10,7 @@ interface MovieCollectionProps {
 export const MovieCollection: React.FC<MovieCollectionProps> = async ({
   id,
 }) => {
-  const region = cookies().get("region")?.value ?? "US";
+  const region = cookies().get("region")?.value ?? "en-US";
   const collection = await Service.collection.details(
     {
       id: id,

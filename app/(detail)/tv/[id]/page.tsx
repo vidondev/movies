@@ -45,7 +45,7 @@ export default async function Page({
   const { id } = params;
   const [series_id, ...args] = id.split("-");
   if (isNaN(parseInt(series_id))) return notFound();
-  const region = cookies().get("region")?.value ?? "US";
+  const region = cookies().get("region")?.value ?? "en-US";
   const tvShow = await Service.tv.detail<
     WithVideos & {
       credits: WithCredits;

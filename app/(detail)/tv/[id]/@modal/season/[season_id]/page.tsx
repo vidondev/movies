@@ -8,7 +8,7 @@ export default async function SeasonDetail({
 }: {
   params: { season_id: string; id: string };
 }) {
-  const region = cookies().get("region")?.value ?? "US";
+  const region = cookies().get("region")?.value ?? "en-US";
 
   const tvShow = await Service.tv.detail(params.id, {
     language: region,

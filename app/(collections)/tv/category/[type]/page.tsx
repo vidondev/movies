@@ -114,8 +114,7 @@ export default async function ListPage({
       notFound();
   }
 
-  const region = cookies().get("region")?.value ?? "US";
-  console.log("🚀 ~ region:", region);
+  const region = cookies().get("region")?.value ?? "en-US";
 
   const { results, total_pages, page } = await Service.discover.tv({
     ...{

@@ -32,9 +32,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size={`lg`}>
+            <SidebarMenuButton size={`lg`} asChild>
               <Link href={"/"}>
-                <div className="flex aspect-square size-12 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <div className="flex aspect-square size-12 items-center justify-center rounded-lg bg-sidebar-accent-foreground text-sidebar-accent">
                   <Icons.Logo className="size-8" />
                 </div>
               </Link>

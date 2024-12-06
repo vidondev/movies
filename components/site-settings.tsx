@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 import { Service } from "@/services/api";
 
 export default async function SiteSettings() {
-  const region = cookies().get("region")?.value ?? "US";
+  const region = cookies().get("region")?.value ?? "en-US";
 
   const languages = await Service.configuration.primary_translations();
 

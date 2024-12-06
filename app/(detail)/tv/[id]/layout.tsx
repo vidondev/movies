@@ -11,7 +11,7 @@ interface DetailLayoutProps {
 }
 
 export async function generateMetadata({ params }: DetailLayoutProps) {
-  const region = cookies().get("region")?.value || "en-US";
+  const region = cookies().get("region")?.value ?? "en-US";
   const { name, first_air_date, last_air_date } = await Service.tv.detail(
     params.id,
     {
