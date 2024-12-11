@@ -30,17 +30,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size={`lg`} asChild>
-              <Link href={"/"}>
-                <div className="flex aspect-square size-12 items-center justify-center rounded-lg bg-sidebar-accent-foreground text-sidebar-accent">
-                  <Icons.Logo className="size-8" />
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="flex aspect-square size-12 items-center justify-center rounded-lg bg-sidebar-accent-foreground text-sidebar-accent">
+          <Link href={"/"}>
+            <Icons.Logo className="size-8" />
+          </Link>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navItems} />

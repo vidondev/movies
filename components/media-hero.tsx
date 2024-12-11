@@ -26,8 +26,8 @@ export const MediaHero: React.FC<MediaHeroProps> = ({
     return <Skeleton className="h-hero relative w-full rounded-none" />;
 
   return (
-    <div className={cn("w-full overflow-hidden relative h-hero", className)}>
-      <div className="relative h-full flex flex-col justify-end z-10 p-5 space-y-4  md:px-10">
+    <div className={cn("relative h-hero", className)}>
+      <div className="container relative h-full flex flex-col justify-end z-10 py-5 space-y-4">
         <div className="flex flex-col justify-end">
           <h1 className="text-2xl font-medium leading-tight tracking-tighter md:text-4xl text-secondary-foreground">
             {movie.title}
